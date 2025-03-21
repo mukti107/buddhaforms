@@ -1,0 +1,6 @@
+- Auth0
+- TailwindCSS
+- NextJS
+- Shadcn UI
+- MongoDB
+- AWS SES

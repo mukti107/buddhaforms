@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import WelcomeScreen from '../components/WelcomeScreen';
 import { Form, FormSubmission, mockForms, getRecentSubmissions, mockSubmissions, getSubmissionsByForm } from '../lib/mockData';
+import FormsAnalytics from '../components/FormsAnalytics';
+import SubmissionLimitInfo from '../components/SubmissionLimitInfo';
 
 export default function Dashboard() {
   // Properly type the forms state
@@ -113,27 +115,13 @@ export default function Dashboard() {
         <h1 className="text-2xl font-semibold text-hubspot-blue-dark">Dashboard</h1>
       </div>
       
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Total Forms Card */}
-        <div className="card-hubspot bg-white p-6 flex flex-col">
-          <span className="text-hubspot-gray-600 text-sm">Total Forms</span>
-          <span className="text-3xl font-semibold text-hubspot-blue-dark mt-2">{formCount}</span>
+      {/* Analytics Section */}
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-[70%]">
+          <FormsAnalytics />
         </div>
-        
-        {/* Total Submissions Card */}
-        <div className="card-hubspot bg-white p-6 flex flex-col">
-          <span className="text-hubspot-gray-600 text-sm">Submissions</span>
-          <span className="text-3xl font-semibold text-hubspot-blue-dark mt-2">{totalSubmissionCount}</span>
-          <span className="text-hubspot-gray-600 text-sm mt-1">
-            {currentMonthSubmissions} this month
-          </span>
-        </div>
-        
-        {/* Active Forms Card */}
-        <div className="card-hubspot bg-white p-6 flex flex-col">
-          <span className="text-hubspot-gray-600 text-sm">Active Forms</span>
-          <span className="text-3xl font-semibold text-hubspot-blue-dark mt-2">{activeFormCount}</span>
+        <div className="w-full md:w-[30%]">
+          <SubmissionLimitInfo used={450} total={1000} planName="Pro Plan" />
         </div>
       </div>
       

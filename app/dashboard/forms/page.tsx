@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, mockForms, getSubmissionsByForm } from '../../lib/mockData';
-import FormsAnalytics from '../../components/FormsAnalytics';
-import SubmissionLimitInfo from '../../components/SubmissionLimitInfo';
 
 export default function FormsPage() {
   const router = useRouter();
@@ -68,16 +66,6 @@ export default function FormsPage() {
           <p className="text-hubspot-gray-600 mt-1 text-sm">
             Manage all your forms and their submissions
           </p>
-        </div>
-      </div>
-      
-      {/* Analytics Section - Adjusted width proportions */}
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="w-full md:w-[70%]">
-          <FormsAnalytics />
-        </div>
-        <div className="w-full md:w-[30%]">
-          <SubmissionLimitInfo used={450} total={1000} planName="Pro Plan" />
         </div>
       </div>
       

@@ -42,7 +42,7 @@ export default function FormDetailPage() {
   );
 
   const { data: submissionsData, error: submissionsError, isLoading: submissionsLoading } = useSWR(
-    `/api/forms/${formId}/submissions`,
+    `/api/submissions?formId=${formId}`,
     fetcher
   );
 

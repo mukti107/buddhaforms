@@ -1,30 +1,52 @@
 "use client";  // Add this directive at the top
 
+import PageHeader from '@/app/components/PageHeader';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Form, mockForms, getSubmissionsByForm } from '../../lib/mockData';
-import PageHeader from '@/app/components/PageHeader';
+import useSWR, { mutate } from 'swr';
+
+interface Form {
+  formId: string;
+  name: string;
+  emailTo: string;
+  createdAt: string;
+  active: boolean;
+  submissionCount: number;
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function FormsPage() {
-  const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
   
-  // Use mock data from our mockData file
-  const forms = mockForms.map(form => ({
-    formId: form.id,
-    name: form.name,
-    emailTo: 'contact@example.com', // Add default email since mockForms doesn't have this
-    createdAt: form.createdAt || new Date('2023-04-15'), // Use createdAt if present or default date
-    submissionCount: form.submissionCount,
-    active: form.active
-  }));
+  // Use SWR for data fetching
+  const { data, error, isLoading } = useSWR('/api/forms', fetcher);
+  const forms = data?.forms || [];
 
-  const handleDelete = (formId: string) => {
-    // In a real app, you would call an API to delete the form
-    alert(`Delete form with ID: ${formId}`);
+  const handleDelete = async (formId: string) => {
+    if (!confirm('Are you sure you want to delete this form?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/forms/${formId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete form');
+      }
+
+      // Revalidate the forms list
+      mutate('/api/forms');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete form. Please try again.');
+    }
   };
 
   // Format date for display
@@ -36,7 +58,7 @@ export default function FormsPage() {
     }).format(date);
   };
 
-  const handleCreateForm = (e: React.FormEvent) => {
+  const handleCreateForm = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formName.trim() || !emailTo.trim()) {
@@ -44,21 +66,33 @@ export default function FormsPage() {
       return;
     }
     
-    // In a real app, you would call an API to create the form
-    console.log('Creating form:', { name: formName, emailTo });
-    
-    // Mock the creation by generating a form ID
-    const newFormId = `form${forms.length + 1}`;
-    
-    // Reset form and close modal
-    setFormName('');
-    setEmailTo('');
-    setIsModalOpen(false);
+    try {
+      const response = await fetch('/api/forms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: formName, emailTo }),
+      });
 
-    // Show success message
-    setTimeout(() => {
+      if (!response.ok) {
+        throw new Error('Failed to create form');
+      }
+
+      // Revalidate the forms list
+      mutate('/api/forms');
+      
+      // Reset form and close modal
+      setFormName('');
+      setEmailTo('');
+      setIsModalOpen(false);
+
+      // Show success message
       alert(`Form "${formName}" created successfully!`);
-    }, 100);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to create form. Please try again.');
+    }
   };
 
   // Define icon for create form button (used in modal)
@@ -72,6 +106,22 @@ export default function FormsPage() {
   const handleCreateFormClick = () => {
     setIsModalOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-buddha-gray-600">Loading forms...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-red-600">Failed to load forms</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -117,7 +167,7 @@ export default function FormsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-buddha-gray-200">
-                {forms.map((form) => (
+                {forms.map((form: Form) => (
                   <tr key={form.formId} className="hover:bg-buddha-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-buddha-blue-dark">{form.name}</div>
@@ -128,7 +178,7 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-buddha-gray-700">
-                        {formatDate(form.createdAt)}
+                        {formatDate(new Date(form.createdAt))}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -145,7 +195,7 @@ export default function FormsPage() {
                         href={`/dashboard/submissions?formId=${form.formId}`}
                         className="text-buddha-orange hover:text-buddha-orange-dark text-sm font-medium"
                       >
-                        {getSubmissionsByForm(form.formId).length} Submissions
+                        {form.submissionCount || 0} Submissions
                       </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">

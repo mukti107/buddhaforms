@@ -1,39 +1,56 @@
 "use client";
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
-import { mockForms, mockSubmissions, getSubmissionsByForm } from '@/app/lib/mockData';
+import useSWR from 'swr';
 import PageHeader from '@/app/components/PageHeader';
 
-export default function FormDetailPage({
-  params
-}: {
-  params: Promise<{ formId: string }>
-}) {
-  const router = useRouter();
-  // Use React.use() to unwrap the Promise-based params
-  const { formId } = React.use(params);
+interface Form {
+  formId: string;
+  name: string;
+  emailTo: string;
+  createdAt: string;
+  active: boolean;
+  settings?: {
+    emailNotifications: boolean;
+    notificationEmail: string;
+    honeypot: boolean;
+  };
+  submissionCount?: number;
+}
+
+interface Submission {
+  id: string;
+  formId: string;
+  submittedAt: string;
+  data: Record<string, any>;
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+export default function FormDetailPage() {
+  const params = useParams();
+  const { formId } = params;
   
-  // Find the form in our centralized mock data
-  const form = mockForms.find(f => f.id === formId);
-  
-  if (!form) {
-    return (
-      <div className="card-buddha text-center p-8">
-        <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Form Not Found</h1>
-        <p className="mb-6 text-buddha-gray-600 text-sm">The form you're looking for doesn't exist or has been deleted.</p>
-        <Link href="/dashboard/forms" className="btn-buddha text-sm">
-          Return to Forms
-        </Link>
-      </div>
-    );
-  }
-  
-  // Get recent submissions for this form
-  const formSubmissions = getSubmissionsByForm(formId);
-  const recentSubmissions = [...formSubmissions]
-    .sort((a, b) => b.submittedAt.getTime() - a.submittedAt.getTime())
+  // Use SWR for data fetching
+  const { data: formData, error: formError, isLoading: formLoading } = useSWR(
+    `/api/forms/${formId}`,
+    fetcher
+  );
+
+  const { data: submissionsData, error: submissionsError, isLoading: submissionsLoading } = useSWR(
+    `/api/forms/${formId}/submissions`,
+    fetcher
+  );
+
+  const form = formData?.form;
+  const formSubmissions = submissionsData?.submissions || [];
+  const recentSubmissions = formSubmissions
+    .sort((a: Submission, b: Submission) => 
+      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+    )
     .slice(0, 5);
 
   // Format date for display
@@ -48,6 +65,28 @@ export default function FormDetailPage({
     }).format(date);
   };
 
+  if (formLoading || submissionsLoading) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-buddha-gray-600">Loading form details...</p>
+      </div>
+    );
+  }
+
+  if (formError || !form) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Form Not Found</h1>
+        <p className="mb-6 text-buddha-gray-600 text-sm">The form you're looking for doesn't exist or has been deleted.</p>
+        <Link href="/dashboard/forms" className="btn-buddha text-sm">
+          Return to Forms
+        </Link>
+      </div>
+    );
+  }
+  
+  const endpointUrl = `https://buddhaforms.com/api/submit/${form.formId}`;
+
   // Define the icons for the actions
   const editIcon = (
     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,13 +99,12 @@ export default function FormDetailPage({
       {/* Header - Using PageHeader component */}
       <PageHeader
         title={form.name}
-        description={`Created on ${formatDate(form.createdAt || new Date())}`}
+        description="Form details and integration guide"
         actions={[
           {
             label: "Edit Form",
             href: `/dashboard/forms/${formId}/edit`,
-            isPrimary: false,
-            icon: editIcon
+            isPrimary: true
           },
           {
             label: "View All Submissions",
@@ -103,22 +141,57 @@ export default function FormDetailPage({
           </div>
         </div>
 
-        {/* Integration code */}
+        {/* Integration Guide */}
         <div className="card-buddha lg:col-span-2">
-          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Integration Code</h2>
-          <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200 overflow-x-auto">
-            <p className="text-sm text-buddha-gray-700 mb-2">Use this form action URL in your HTML form:</p>
-            <div className="text-sm font-mono text-buddha-gray-800 p-2 bg-white border border-buddha-gray-200 rounded-buddha">
-              <code>https://api.buddhaforms.com/submit/{formId}</code>
+          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Integration Guide</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-medium text-buddha-gray-700 mb-2">Form Endpoint</h3>
+              <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200">
+                <div className="flex items-center justify-between">
+                  <code className="text-sm font-mono text-buddha-gray-800">{endpointUrl}</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(endpointUrl);
+                    }}
+                    className="text-buddha-orange hover:text-buddha-orange-dark text-sm"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex gap-3">
-            <button className="btn-buddha-secondary text-sm flex items-center gap-1">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-              <span>Copy URL</span>
-            </button>
+
+            <div>
+              <h3 className="text-sm font-medium text-buddha-gray-700 mb-2">HTML Form Example</h3>
+              <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200">
+                <pre className="text-sm font-mono text-buddha-gray-800 whitespace-pre-wrap">
+{`<form action="${endpointUrl}" method="POST">
+  <input type="text" name="name" required>
+  <input type="email" name="email" required>
+  <button type="submit">Submit</button>
+</form>`}
+                </pre>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-buddha-gray-700 mb-2">JavaScript Fetch Example</h3>
+              <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200">
+                <pre className="text-sm font-mono text-buddha-gray-800 whitespace-pre-wrap">
+{`fetch('${endpointUrl}', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    name: 'John Doe',
+    email: 'john@example.com'
+  })
+})`}
+                </pre>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -158,7 +231,7 @@ export default function FormDetailPage({
                   {recentSubmissions.map((submission) => (
                     <tr key={submission.id} className="hover:bg-buddha-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-buddha-gray-600">
-                        {formatDate(submission.submittedAt)}
+                        {formatDate(new Date(submission.submittedAt))}
                       </td>
                       <td className="px-6 py-4 text-sm text-buddha-gray-800">
                         <div className="max-w-md overflow-hidden">

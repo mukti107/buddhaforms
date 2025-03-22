@@ -1,33 +1,51 @@
 "use client";
 
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { mockForms, mockSubmissions } from '@/app/lib/mockData';
+import useSWR from 'swr';
 import PageHeader from '@/app/components/PageHeader';
 
-export default function SubmissionsPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const formIdFilter = searchParams.get('formId');
-  
-  // Filter submissions if a formId is provided
-  const filteredSubmissions = formIdFilter 
-    ? mockSubmissions.filter(sub => sub.formId === formIdFilter)
-    : mockSubmissions;
-    
-  // Sort by newest first
-  const sortedSubmissions = [...filteredSubmissions].sort(
-    (a, b) => b.submittedAt.getTime() - a.submittedAt.getTime()
-  );
+interface Submission {
+  id: string;
+  formId: string;
+  data: Record<string, any>;
+  submittedAt: string;
+  isSpam: boolean;
+  form?: {
+    name: string;
+  };
+}
 
-  // Get form name if filtering by form
-  const formName = formIdFilter 
-    ? mockForms.find(form => form.id === formIdFilter)?.name || 'Unknown Form'
-    : null;
+interface PaginationData {
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+export default function SubmissionsPage() {
+  const searchParams = useSearchParams();
+  const formId = searchParams.get('formId');
+  const page = searchParams.get('page') || '1';
+  const limit = searchParams.get('limit') || '10';
+
+  // Construct API URL with query parameters
+  const apiUrl = `/api/submissions?${new URLSearchParams({
+    ...(formId && { formId }),
+    page,
+    limit,
+  })}`;
+
+  const { data, error, isLoading } = useSWR<{
+    submissions: Submission[];
+    pagination: PaginationData;
+  }>(apiUrl, fetcher);
 
   // Format date for display
-  const formatDate = (date: Date) => {
+  const formatDate = (dateString: string) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -35,58 +53,42 @@ export default function SubmissionsPage() {
       hour: 'numeric',
       minute: 'numeric',
       hour12: true,
-    }).format(date);
+    }).format(new Date(dateString));
   };
 
-  // Get a preview of the submission data
-  const getSubmissionPreview = (data: Record<string, any>) => {
-    // If there's a name field, use that
-    if (data.name) return data.name;
-    // If there's an email field, use that
-    if (data.email) return data.email;
-    // If there's a subject or title field, use that
-    if (data.subject) return data.subject;
-    if (data.title) return data.title;
-    
-    // Otherwise, use the first field that's a string and not too long
-    for (const [key, value] of Object.entries(data)) {
-      if (typeof value === 'string' && value.length < 50) {
-        return value;
-      }
-    }
-    
-    // If nothing else works, just show "View details"
-    return "View details";
-  };
+  if (isLoading) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-buddha-gray-600">Loading submissions...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-red-600">Failed to load submissions</p>
+      </div>
+    );
+  }
+
+  const { submissions = [], pagination } = data || {};
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={formIdFilter ? `${formName} Submissions` : 'All Submissions'}
-        description={formIdFilter 
-          ? `Viewing submissions for ${formName}`
-          : 'View and manage all form submissions across your account'
-        }
-        actions={formIdFilter ? [
-          {
-            label: "View All Submissions",
-            href: "/dashboard/submissions",
-            isPrimary: false
-          }
-        ] : []}
+        title="Form Submissions"
+        description={formId ? "View submissions for this form" : "View all form submissions"}
       />
-      
-      {sortedSubmissions.length === 0 ? (
+
+      {submissions.length === 0 ? (
         <div className="card-buddha text-center p-8">
           <svg className="h-12 w-12 text-buddha-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <h2 className="text-xl font-semibold text-buddha-blue-dark mb-2">No submissions found</h2>
+          <h2 className="text-xl font-semibold text-buddha-blue-dark mb-2">No submissions yet</h2>
           <p className="text-buddha-gray-600 mb-6 text-sm">
-            {formIdFilter 
-              ? `There are no submissions yet for ${formName}.`
-              : 'Once your forms receive submissions, they will appear here.'
-            }
+            Submissions will appear here once your form starts receiving responses.
           </p>
         </div>
       ) : (
@@ -96,15 +98,13 @@ export default function SubmissionsPage() {
               <thead className="bg-buddha-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
-                    Date
+                    Submission Date
                   </th>
-                  {!formIdFilter && (
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
-                      Form
-                    </th>
-                  )}
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
-                    Preview
+                    Form
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
+                    Data
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Status
@@ -115,39 +115,39 @@ export default function SubmissionsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-buddha-gray-200">
-                {sortedSubmissions.map((submission) => (
-                  <tr key={submission.id} className={`hover:bg-buddha-gray-50 ${!submission.read ? 'bg-buddha-orange-50' : ''}`}>
+                {submissions.map((submission) => (
+                  <tr key={submission.id} className="hover:bg-buddha-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-buddha-gray-600">
                       {formatDate(submission.submittedAt)}
                     </td>
-                    {!formIdFilter && (
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <Link 
-                          href={`/dashboard/forms/${submission.formId}`}
-                          className="text-buddha-blue-dark hover:text-buddha-orange font-medium text-sm"
-                        >
-                          {submission.formName}
-                        </Link>
-                      </td>
-                    )}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-buddha-blue-dark">
+                        {submission.form?.name || 'Unknown Form'}
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-buddha-gray-800 truncate max-w-xs">
-                        {getSubmissionPreview(submission.data)}
+                      <div className="text-sm text-buddha-gray-900 max-w-md overflow-hidden">
+                        {Object.entries(submission.data).map(([key, value]) => (
+                          <div key={key} className="truncate">
+                            <span className="font-medium">{key}:</span>{' '}
+                            <span>{typeof value === 'string' ? value : JSON.stringify(value)}</span>
+                          </div>
+                        ))}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        !submission.read 
-                          ? 'bg-buddha-orange-light text-buddha-orange-dark' 
-                          : 'bg-buddha-gray-200 text-buddha-gray-700'
+                        submission.isSpam 
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-green-100 text-green-800'
                       }`}>
-                        {!submission.read ? 'New' : 'Read'}
+                        {submission.isSpam ? 'Spam' : 'Valid'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                      <Link 
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Link
                         href={`/dashboard/submissions/${submission.id}`}
-                        className="text-buddha-orange hover:text-buddha-orange-dark font-medium"
+                        className="text-buddha-orange hover:text-buddha-orange-dark"
                       >
                         View Details
                       </Link>
@@ -157,6 +157,40 @@ export default function SubmissionsPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {pagination && pagination.pages > 1 && (
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-buddha-gray-200 sm:px-6">
+              <div className="flex-1 flex justify-between sm:hidden">
+                <Link
+                  href={`/dashboard/submissions?page=${Math.max(1, pagination.page - 1)}`}
+                  className={`btn-buddha-secondary text-sm ${pagination.page <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Previous
+                </Link>
+                <Link
+                  href={`/dashboard/submissions?page=${Math.min(pagination.pages, pagination.page + 1)}`}
+                  className={`btn-buddha-secondary text-sm ${pagination.page >= pagination.pages ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Next
+                </Link>
+              </div>
+              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-buddha-gray-700">
+                    Showing <span className="font-medium">{((pagination.page - 1) * pagination.limit) + 1}</span> to{' '}
+                    <span className="font-medium">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> of{' '}
+                    <span className="font-medium">{pagination.total}</span> results
+                  </p>
+                </div>
+                <div>
+                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    {/* Add pagination buttons here */}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

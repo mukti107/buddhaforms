@@ -1,5 +1,6 @@
 import './globals.css';
 import { Lexend } from 'next/font/google';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 const lexend = Lexend({ 
   subsets: ['latin'],
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={lexend.className}>
       <body className={lexend.className} suppressHydrationWarning={true}>
-        {children}
+        <UserProvider>
+          {children}
+        </UserProvider>
       </body>
     </html>
   );

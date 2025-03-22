@@ -1,19 +1,19 @@
 import { NextResponse } from 'next/server';
-import connectDB from '../../lib/mongodb';
-import { Form } from '../../models/Form';
+import { Form } from '../../models';
 import { nanoid } from 'nanoid';
 import { getSession } from '@auth0/nextjs-auth0';
+import { cookies } from 'next/headers';
 
+// Create form
 export async function POST(req: Request) {
   try {
+    await cookies();
     const session = await getSession();
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { name, emailTo } = await req.json();
-    
-    await connectDB();
     
     const formId = nanoid(10);
     const form = await Form.create({
@@ -25,6 +25,26 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ form });
   } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+// List forms
+export async function GET() {
+  try {
+    await cookies();
+    const session = await getSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const forms = await Form.find({ userId: session.user.sub })
+      .sort({ createdAt: -1 });
+
+    return NextResponse.json({ forms });
+  } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 } 

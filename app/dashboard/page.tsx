@@ -1,78 +1,46 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import WelcomeScreen from '../components/WelcomeScreen';
-import { Form, FormSubmission, mockForms, getRecentSubmissions, mockSubmissions, getSubmissionsByForm } from '../lib/mockData';
 import FormsAnalytics from '../components/FormsAnalytics';
 import SubmissionLimitInfo from '../components/SubmissionLimitInfo';
 
-export default function Dashboard() {
-  // Properly type the forms state
-  const [forms, setForms] = useState<Form[]>([]);
-  // Add a loading state to prevent welcome screen flash
-  const [isLoading, setIsLoading] = useState(true);
-  
-  // Load forms data (mock for now)
-  useEffect(() => {
-    // In a real app, this would be an API call
-    // For now, we'll use mock data from mockData.ts
-    
-    // Check if we should show empty state for demo purposes
-    // If showEmptyState is not set or is 'true', show the welcome screen
-    // If it's explicitly set to 'false', show the dashboard with forms
-    const shouldShowEmptyState = localStorage.getItem('showEmptyState');
-    const hasSeenWelcome = shouldShowEmptyState === 'false';
-    
-    // Set forms data - empty array if we want to show empty state
-    setForms(hasSeenWelcome ? mockForms : []);
-    // Set loading to false after we've determined the initial state
-    setIsLoading(false);
-  }, []);
-  
-  // Handle form creation from the modal
-  useEffect(() => {
-    // Function to handle the event when a form is created
-    const handleFormCreated = () => {
-      // If we had an empty state, now show at least one form
-      if (forms.length === 0) {
-        // Set localStorage to remember we don't want empty state anymore
-        localStorage.setItem('showEmptyState', 'false');
-        
-        const newForm: Form = { 
-          id: 'form1', 
-          name: 'New Form', 
-          submissionCount: 0, 
-          active: true 
-        };
-        setForms([newForm]);
-      }
-    };
-    
-    // Listen for a custom event that our form creation modal might dispatch
-    document.addEventListener('formCreated', handleFormCreated);
-    
-    return () => {
-      document.removeEventListener('formCreated', handleFormCreated);
-    };
-  }, [forms]);
+interface Form {
+  formId: string;
+  name: string;
+  active: boolean;
+  createdAt: string;
+}
 
-  // Mock data for UI development derived from forms state
-  const formCount = forms.length;
-  const submissionCount = forms.reduce((total, form) => total + (form.submissionCount || 0), 0);
-  const activeFormCount = forms.filter(form => form.active).length;
+interface Submission {
+  id: string;
+  formId: string;
+  data: Record<string, any>;
+  submittedAt: string;
+  form?: {
+    name: string;
+  };
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+export default function Dashboard() {
+  // Fetch forms data
+  const { data: formsData, error: formsError, isLoading: formsLoading } = useSWR('/api/forms', fetcher);
   
-  // Calculate submissions for current month (for demo purposes)
-  const currentMonth = new Date().getMonth();
-  // Use the actual count from mockSubmissions instead of the sum from form.submissionCount
-  const totalSubmissionCount = forms.length === 0 ? 0 : mockSubmissions.length;
-  const currentMonthSubmissions = Math.floor(totalSubmissionCount * 0.4); // Just a mock calculation for demo
-  
-  // Get recent submissions from mock data - only show 3
-  const recentSubmissions = forms.length === 0 ? [] : getRecentSubmissions(3);
+  // Fetch recent submissions
+  const { data: submissionsData, error: submissionsError, isLoading: submissionsLoading } = useSWR(
+    '/api/submissions?limit=3',
+    fetcher
+  );
+
+  const forms = formsData?.forms || [];
+  const recentSubmissions = submissionsData?.submissions || [];
 
   // Format date for display
-  const formatDate = (date: Date) => {
+  const formatDate = (dateString: string) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -80,11 +48,11 @@ export default function Dashboard() {
       hour: 'numeric',
       minute: 'numeric',
       hour12: true,
-    }).format(date);
+    }).format(new Date(dateString));
   };
 
-  // Show a loading state to prevent welcome screen flash
-  if (isLoading) {
+  // Show loading state
+  if (formsLoading || submissionsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-pulse">
@@ -96,16 +64,28 @@ export default function Dashboard() {
     );
   }
 
+  // Show error state
+  if (formsError || submissionsError) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-red-600">Failed to load dashboard data</p>
+      </div>
+    );
+  }
+
   // If there are no forms, show welcome screen
   if (forms.length === 0) {
     return <WelcomeScreen onGetStarted={() => {
-      // This function handles the "Get Started" button click
       // Open the create form modal directly
       document.dispatchEvent(new CustomEvent('openCreateFormModal'));
     }} />;
   }
 
-  // Otherwise show regular dashboard
+  // Calculate dashboard stats
+  const formCount = forms.length;
+  const activeFormCount = forms.filter(form => form.active).length;
+  const submissionCount = submissionsData?.pagination?.total || 0;
+
   return (
     <div className="space-y-6">
       <div>
@@ -118,7 +98,7 @@ export default function Dashboard() {
           <FormsAnalytics />
         </div>
         <div className="w-full md:w-[30%]">
-          <SubmissionLimitInfo used={450} total={1000} planName="Pro Plan" />
+          <SubmissionLimitInfo used={submissionCount} total={1000} planName="Pro Plan" />
         </div>
       </div>
       
@@ -143,18 +123,19 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-3">
               {recentSubmissions.map((submission) => (
-                <div 
-                  key={submission.id} 
+                <Link 
+                  key={submission.id}
+                  href={`/dashboard/submissions/${submission.id}`}
                   className="flex items-center justify-between p-3 rounded-buddha border border-buddha-gray-200 hover:border-buddha-gray-300 bg-white"
                 >
                   <div>
-                    <div className="font-medium text-buddha-blue-dark">{submission.formName}</div>
+                    <div className="font-medium text-buddha-blue-dark">{submission.form?.name}</div>
                     <div className="text-sm text-buddha-gray-600">{formatDate(submission.submittedAt)}</div>
                   </div>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-buddha-green-light text-buddha-green-dark">
                     New
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -169,52 +150,34 @@ export default function Dashboard() {
             </Link>
           </div>
           
-          {forms.length === 0 ? (
-            <div className="text-center py-8 border border-dashed border-buddha-gray-300 rounded-buddha bg-buddha-gray-50">
-              <svg className="h-12 w-12 text-buddha-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="text-buddha-gray-600">No forms created yet</p>
-              <button 
-                onClick={() => {
-                  // Use document.dispatchEvent to communicate with layout
-                  document.dispatchEvent(new CustomEvent('openCreateFormModal'));
-                }}
-                className="btn-buddha inline-block mt-4"
+          <div className="space-y-3">
+            {forms.map((form) => (
+              <Link 
+                key={form.formId} 
+                href={`/dashboard/forms/${form.formId}`}
+                className="flex items-center justify-between p-3 rounded-buddha border border-buddha-gray-200 hover:border-buddha-orange transition-colors duration-200"
               >
-                Create Your First Form
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {forms.map((form) => (
-                <Link 
-                  key={form.id} 
-                  href={`/dashboard/forms/${form.id}`}
-                  className="flex items-center justify-between p-3 rounded-buddha border border-buddha-gray-200 hover:border-buddha-orange transition-colors duration-200"
-                >
-                  <div className="flex items-center">
-                    <div className="h-10 w-10 rounded-buddha bg-buddha-gray-100 text-buddha-orange flex items-center justify-center mr-3">
-                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium text-buddha-blue-dark">{form.name}</div>
-                      <div className="text-sm text-buddha-gray-600">{getSubmissionsByForm(form.id).length} submissions</div>
-                    </div>
+                <div className="flex items-center">
+                  <div className="h-10 w-10 rounded-buddha bg-buddha-gray-100 text-buddha-orange flex items-center justify-center mr-3">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                   </div>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    form.active 
-                      ? 'bg-buddha-green-light text-buddha-green-dark' 
-                      : 'bg-buddha-gray-200 text-buddha-gray-700'
-                  }`}>
-                    {form.active ? 'Active' : 'Inactive'}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
+                  <div>
+                    <div className="font-medium text-buddha-blue-dark">{form.name}</div>
+                    <div className="text-sm text-buddha-gray-600">Created {formatDate(form.createdAt)}</div>
+                  </div>
+                </div>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  form.active 
+                    ? 'bg-buddha-green-light text-buddha-green-dark' 
+                    : 'bg-buddha-gray-200 text-buddha-gray-700'
+                }`}>
+                  {form.active ? 'Active' : 'Inactive'}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
       
@@ -228,7 +191,7 @@ export default function Dashboard() {
             </p>
             <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200">
               <div className="text-sm font-mono text-buddha-gray-800">
-                <code>https://api.buddhaforms.com/submit/YOUR_FORM_ID</code>
+                <code>https://buddhaforms.com/api/submit/YOUR_FORM_ID</code>
               </div>
             </div>
           </div>

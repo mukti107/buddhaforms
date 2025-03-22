@@ -3,62 +3,45 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import useSWR, { mutate } from 'swr';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
-// Mock user for UI development
-const user = {
-  name: "Jane Smith",
-  email: "jane@example.com",
-  picture: "https://randomuser.me/api/portraits/women/60.jpg",
-};
+interface CreateFormData {
+  name: string;
+  emailTo: string;
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, error: userError, isLoading: userLoading } = useUser();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Fetch forms to determine if user has any
+  const { data: formsData, error: formsError } = useSWR('/api/forms', fetcher);
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCreateFormModalOpen, setIsCreateFormModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
-  const [shouldShowSidebar, setShouldShowSidebar] = useState(true);
-  const pathname = usePathname();
-  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if we should be showing the sidebar based on whether forms exist
-  useEffect(() => {
-    // Check if we should show empty state for demo purposes
-    const shouldShowEmptyState = localStorage.getItem('showEmptyState');
-    const hasSeenWelcome = shouldShowEmptyState === 'false';
-    
-    // Only show sidebar if we have forms
-    setShouldShowSidebar(hasSeenWelcome);
-  }, []);
+  // Determine if sidebar should be shown based on forms data
+  const shouldShowSidebar = Boolean(formsData?.forms?.length);
 
-  // Listen for the formCreated event to show sidebar after form creation
+  // Redirect if not authenticated
   useEffect(() => {
-    const handleFormCreated = () => {
-      setShouldShowSidebar(true);
-    };
-    
-    document.addEventListener('formCreated', handleFormCreated);
-    
-    return () => {
-      document.removeEventListener('formCreated', handleFormCreated);
-    };
-  }, []);
-
-  // Listen for the custom event from dashboard page
-  useEffect(() => {
-    const handleOpenFormModal = () => {
-      setIsCreateFormModalOpen(true);
-    };
-    
-    document.addEventListener('openCreateFormModal', handleOpenFormModal);
-    
-    return () => {
-      document.removeEventListener('openCreateFormModal', handleOpenFormModal);
-    };
-  }, []);
+    if (!userLoading && !user) {
+      // Redirect to Auth0 login
+      window.location.href = '/api/auth/login';
+    }
+  }, [user, userLoading]);
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
@@ -98,7 +81,7 @@ export default function DashboardLayout({
     return false;
   };
 
-  const handleCreateForm = (e: React.FormEvent) => {
+  const handleCreateForm = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formName.trim() || !emailTo.trim()) {
@@ -106,37 +89,52 @@ export default function DashboardLayout({
       return;
     }
     
-    // In a real app, you would call an API to create the form
-    console.log('Creating form:', { name: formName, emailTo });
+    setIsSubmitting(true);
     
-    // Reset form and close modal
-    setFormName('');
-    setEmailTo('');
-    setIsCreateFormModalOpen(false);
-    
-    // Set form creation state in localStorage so the dashboard knows we have forms
-    localStorage.setItem('showEmptyState', 'false');
-    
-    // Dispatch an event for the dashboard to listen for
-    document.dispatchEvent(new CustomEvent('formCreated'));
-    
-    // In a real app, you would refresh the forms list or navigate to the forms page
-    if (pathname !== "/dashboard/forms") {
-      router.push('/dashboard/forms');
+    try {
+      const response = await fetch('/api/forms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          name: formName, 
+          emailTo 
+        } as CreateFormData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create form');
+      }
+
+      const data = await response.json();
+      
+      // Reset form and close modal
+      setFormName('');
+      setEmailTo('');
+      setIsCreateFormModalOpen(false);
+      
+      // Revalidate forms data
+      mutate('/api/forms');
+      
+      // Navigate to forms page if not already there
+      if (pathname !== "/dashboard/forms") {
+        router.push('/dashboard/forms');
+      }
+      
+      // Show success message
+      alert(`Form "${formName}" created successfully!`);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to create form. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    // Show success message
-    alert(`Form "${formName}" created successfully!`);
   };
 
   const handleLogout = () => {
-    // In a real app, this would clear authentication tokens, call logout API, etc.
-    // For now, just simulate logout by redirecting to home page
-    localStorage.removeItem('showEmptyState'); // Reset welcome screen state
-    
-    // Show confirmation before logout
     if (confirm('Are you sure you want to log out?')) {
-      router.push('/');
+      router.push('/api/auth/logout');
     }
   };
 
@@ -150,7 +148,7 @@ export default function DashboardLayout({
         ></div>
       )}
 
-      {/* Sidebar - only show when shouldShowSidebar is true */}
+      {/* Sidebar - only show when user has forms */}
       {shouldShowSidebar && (
         <div
           id="sidebar"
@@ -172,13 +170,17 @@ export default function DashboardLayout({
           <div className="border-b border-buddha-gray-200 p-4">
             <div className="flex items-center gap-3 mb-2">
               <img
-                src={user.picture}
-                alt={user.name}
+                src={user?.picture || "https://via.placeholder.com/40"}
+                alt={user?.name || "User"}
                 className="h-9 w-9 rounded-full border-2 border-buddha-gray-100"
               />
               <div className="flex flex-col overflow-hidden">
-                <span className="font-medium text-sm text-buddha-blue-dark truncate">{user.name}</span>
-                <span className="text-xs text-buddha-gray-500 truncate">{user.email}</span>
+                <span className="font-medium text-sm text-buddha-blue-dark truncate">
+                  {user?.name}
+                </span>
+                <span className="text-xs text-buddha-gray-500 truncate">
+                  {user?.email}
+                </span>
               </div>
             </div>
           </div>
@@ -402,9 +404,10 @@ export default function DashboardLayout({
                 </button>
                 <button
                   type="submit"
-                  className="btn-buddha text-sm"
+                  disabled={isSubmitting}
+                  className={`btn-buddha text-sm ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
                 >
-                  Create Form
+                  {isSubmitting ? 'Creating...' : 'Create Form'}
                 </button>
               </div>
             </form>

@@ -1,25 +1,72 @@
 "use client";
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { mockForms } from '@/app/lib/mockData';
+import useSWR, { mutate } from 'swr';
 import PageHeader from '@/app/components/PageHeader';
 import { Toggle } from '@/app/components/ui/toggle';
 
-export default function EditFormPage({
-  params
-}: {
-  params: Promise<{ formId: string }>
-}) {
+interface Form {
+  formId: string;
+  name: string;
+  emailTo: string;
+  active: boolean;
+  settings?: {
+    emailNotifications: boolean;
+    notificationEmail: string;
+    honeypot: boolean;
+    dataRetention?: string;
+  };
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+export default function EditFormPage() {
   const router = useRouter();
-  // Use React.use() to unwrap the Promise-based params
-  const { formId } = React.use(params);
-  
-  // Find form from centralized mock data
-  const formData = mockForms.find(f => f.id === formId);
-  
-  if (!formData) {
+  const params = useParams();
+  const { formId } = params;
+
+  // Fetch form data
+  const { data, error, isLoading } = useSWR<{ form: Form }>(`/api/forms/${formId}`, fetcher);
+  const form = data?.form;
+
+  // State for form fields
+  const [name, setName] = useState(form?.name || '');
+  const [emailTo, setEmailTo] = useState(form?.emailTo || '');
+  const [active, setActive] = useState(form?.active || false);
+  const [spamProtection, setSpamProtection] = useState(form?.settings?.honeypot || false);
+  const [dataRetention, setDataRetention] = useState(form?.settings?.dataRetention || 'forever');
+  const [emailNotifications, setEmailNotifications] = useState(form?.settings?.emailNotifications !== undefined ? form?.settings.emailNotifications : true);
+  const [notificationEmail, setNotificationEmail] = useState(form?.settings?.notificationEmail || '');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [deleteChecked, setDeleteChecked] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Update state when form data is loaded
+  React.useEffect(() => {
+    if (form) {
+      setName(form.name);
+      setEmailTo(form.emailTo);
+      setActive(form.active);
+      setSpamProtection(form.settings?.honeypot || false);
+      setDataRetention(form.settings?.dataRetention || 'forever');
+      setEmailNotifications(form.settings?.emailNotifications !== undefined ? form.settings.emailNotifications : true);
+      setNotificationEmail(form.settings?.notificationEmail || '');
+    }
+  }, [form]);
+
+  if (isLoading) {
+    return (
+      <div className="card-buddha text-center p-8">
+        <p className="text-buddha-gray-600">Loading form details...</p>
+      </div>
+    );
+  }
+
+  if (error || !form) {
     return (
       <div className="card-buddha text-center p-8">
         <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Form Not Found</h1>
@@ -30,19 +77,7 @@ export default function EditFormPage({
       </div>
     );
   }
-  
-  // State for form fields
-  const [name, setName] = useState(formData.name);
-  const [active, setActive] = useState(formData.active);
-  const [spamProtection, setSpamProtection] = useState(formData.settings?.honeypot || false);
-  const [dataRetention, setDataRetention] = useState('forever'); // Default since it's not in mockForms
-  const [emailNotifications, setEmailNotifications] = useState(formData.settings?.emailNotifications !== undefined ? formData.settings.emailNotifications : true);
-  const [notificationEmail, setNotificationEmail] = useState(formData.settings?.notificationEmail || '');
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [deleteChecked, setDeleteChecked] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  
+
   // Generate user-friendly data retention text
   const getDataRetentionText = (value: string) => {
     switch(value) {
@@ -54,47 +89,67 @@ export default function EditFormPage({
       default: return 'Forever';
     }
   };
-  
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setSaveSuccess(false);
-    
-    // In a real app, you would call an API to update the form
-    console.log('Updating form:', { 
-      formId, 
-      name, 
-      active, 
-      spamProtection, 
-      dataRetention,
-      emailNotifications,
-      notificationEmail
-    });
-    
-    // Simulate API call
-    setTimeout(() => {
-      setSaving(false);
-      setSaveSuccess(true);
-      // No longer redirecting
-      // router.push(`/dashboard/forms/${formId}`);
+
+    try {
+      const response = await fetch(`/api/forms/${formId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          emailTo,
+          active,
+          settings: {
+            honeypot: spamProtection,
+            dataRetention,
+            emailNotifications,
+            notificationEmail: emailNotifications ? notificationEmail : null,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update form');
+      }
+
+      // Revalidate form data
+      mutate(`/api/forms/${formId}`);
       
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        setSaveSuccess(false);
-      }, 3000);
-    }, 800);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save changes. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
-  
-  // Handle form deletion
-  const handleDeleteForm = () => {
-    // In a real app, you would call an API to delete the form
-    console.log('Deleting form:', formId);
-    
-    // Simulate API call
-    setTimeout(() => {
+
+  const handleDeleteForm = async () => {
+    if (!deleteChecked) return;
+
+    try {
+      const response = await fetch(`/api/forms/${formId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete form');
+      }
+
+      // Revalidate forms list and redirect
+      mutate('/api/forms');
       router.push('/dashboard/forms');
-    }, 800);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete form. Please try again.');
+    }
   };
 
   // Define the save action with loading state
@@ -118,7 +173,7 @@ export default function EditFormPage({
           },
           {
             label: saving ? "Saving..." : "Save Changes",
-            onClick: handleSubmit,
+            onClick: handleSave,
             isPrimary: true,
             isLoading: saving,
             disabled: saving,
@@ -144,7 +199,7 @@ export default function EditFormPage({
       )}
 
       {/* Form settings */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSave} className="space-y-6">
         <div className="card-buddha">
           <h2 className="text-lg font-medium text-buddha-blue-dark mb-6">Form Settings</h2>
           
@@ -164,6 +219,25 @@ export default function EditFormPage({
             />
             <p className="mt-1 text-xs text-buddha-gray-500">
               This name is only visible to you in your dashboard.
+            </p>
+          </div>
+          
+          {/* Recipient Email */}
+          <div className="mb-6">
+            <label htmlFor="emailTo" className="block text-sm font-medium text-buddha-gray-700 mb-1">
+              Form Submissions Email
+            </label>
+            <input
+              type="email"
+              id="emailTo"
+              value={emailTo}
+              onChange={(e) => setEmailTo(e.target.value)}
+              className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
+              placeholder="email@example.com"
+              required
+            />
+            <p className="mt-1 text-xs text-buddha-gray-500">
+              Form submissions will be sent to this email address.
             </p>
           </div>
           

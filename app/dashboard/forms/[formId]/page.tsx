@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import useSWR from 'swr';
 import PageHeader from '@/app/components/PageHeader';
+import { getSubmissionUrl } from '@/app/helper';
 
 interface Form {
   formId: string;
@@ -85,7 +86,7 @@ export default function FormDetailPage() {
     );
   }
   
-  const endpointUrl = `https://buddhaforms.com/api/submit/${form.formId}`;
+  const endpointUrl = getSubmissionUrl(form.formId);
 
   // Define the icons for the actions
   const editIcon = (

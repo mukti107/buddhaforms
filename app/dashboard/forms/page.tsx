@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import { useRouter } from 'next/navigation';
+import { getSubmissionUrl } from '@/app/helper';
 
 interface Form {
   formId: string;
@@ -258,7 +259,7 @@ export default function FormsPage() {
             </p>
             <div className="bg-buddha-gray-50 p-4 rounded-buddha border border-buddha-gray-200">
               <div className="text-sm font-mono text-buddha-gray-800">
-                <code>https://buddhaforms.com/api/submit/YOUR_FORM_ID</code>
+                <code>{getSubmissionUrl("YOUR_FORM_ID")}</code>
               </div>
             </div>
           </div>

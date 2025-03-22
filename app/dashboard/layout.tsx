@@ -129,6 +129,17 @@ export default function DashboardLayout({
     alert(`Form "${formName}" created successfully!`);
   };
 
+  const handleLogout = () => {
+    // In a real app, this would clear authentication tokens, call logout API, etc.
+    // For now, just simulate logout by redirecting to home page
+    localStorage.removeItem('showEmptyState'); // Reset welcome screen state
+    
+    // Show confirmation before logout
+    if (confirm('Are you sure you want to log out?')) {
+      router.push('/');
+    }
+  };
+
   return (
     <div className="flex h-screen bg-hubspot-gray-50">
       {/* Sidebar backdrop for mobile */}
@@ -253,6 +264,21 @@ export default function DashboardLayout({
                 </svg>
                 <span>Documentation</span>
               </a>
+              
+              <button 
+                onClick={handleLogout}
+                className="sidebar-link text-sm w-full mt-2 text-left"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span>Log Out</span>
+              </button>
             </div>
           </nav>
         </div>

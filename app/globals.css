@@ -44,6 +44,10 @@ body {
     @apply bg-white hover:bg-hubspot-gray-100 text-hubspot-blue-dark border border-hubspot-gray-300 font-medium py-2 px-4 rounded-hubspot transition-colors duration-200;
   }
   
+  .btn-hubspot-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-hubspot transition-colors duration-200;
+  }
+  
   .card-hubspot {
     @apply bg-white rounded-hubspot-md shadow-hubspot p-6 border border-hubspot-gray-200;
   }

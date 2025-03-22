@@ -36,6 +36,9 @@ export default function Dashboard() {
     const handleFormCreated = () => {
       // If we had an empty state, now show at least one form
       if (forms.length === 0) {
+        // Set localStorage to remember we don't want empty state anymore
+        localStorage.setItem('showEmptyState', 'false');
+        
         const newForm: Form = { 
           id: 'form1', 
           name: 'New Form', 
@@ -96,15 +99,9 @@ export default function Dashboard() {
   // If there are no forms, show welcome screen
   if (forms.length === 0) {
     return <WelcomeScreen onGetStarted={() => {
-      // Set localStorage to remember we don't want empty state anymore
-      localStorage.setItem('showEmptyState', 'false');
-      
-      // After creating a form from the welcome screen, we would normally fetch new form data
-      // For demo purposes, we'll just set a default form with the first mock form
-      setTimeout(() => {
-        // Use the first form from our mock data
-        setForms([mockForms[0]]);
-      }, 500); // Small delay to simulate API call
+      // This function handles the "Get Started" button click
+      // Open the create form modal directly
+      document.dispatchEvent(new CustomEvent('openCreateFormModal'));
     }} />;
   }
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { mockForms } from '@/app/lib/mockData';
 import PageHeader from '@/app/components/PageHeader';
+import { Toggle } from '@/app/components/ui/toggle';
 
 export default function EditFormPage({
   params
@@ -166,86 +167,38 @@ export default function EditFormPage({
             </p>
           </div>
           
-          {/* Toggle for Form Status */}
-          <div className="flex items-center justify-between py-4 border-t border-hubspot-gray-200">
-            <div>
-              <h3 className="text-sm font-medium text-hubspot-blue-dark">Enable Form</h3>
-              <p className="text-xs text-hubspot-gray-500 mt-1">
-                When disabled, your form will not accept new submissions.
-              </p>
-            </div>
-            <div className="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
-              <input 
-                type="checkbox"
-                id="formStatus"
-                className="opacity-0 w-0 h-0"
-                checked={active}
-                onChange={(e) => setActive(e.target.checked)}
-              />
-              <label 
-                htmlFor="formStatus"
-                className={`absolute top-0 left-0 right-0 bottom-0 rounded-full cursor-pointer transition-colors duration-200 ${active ? 'bg-hubspot-green' : 'bg-hubspot-gray-300'}`}
-              >
-                <span 
-                  className={`absolute left-1 bottom-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ${active ? 'transform translate-x-6' : ''}`}
-                ></span>
-              </label>
-            </div>
+          {/* Toggle for Form Activation */}
+          <div className="flex py-4 border-b border-hubspot-gray-200">
+            <Toggle
+              id="formStatus"
+              checked={active}
+              onChange={setActive}
+              label="Form Status"
+              description={`This form is currently ${active ? 'active' : 'inactive'} and ${active ? 'accepting' : 'not accepting'} submissions.`}
+            />
           </div>
           
           {/* Toggle for Spam Protection */}
-          <div className="flex items-center justify-between py-4 border-t border-hubspot-gray-200">
-            <div>
-              <h3 className="text-sm font-medium text-hubspot-blue-dark">Spam Protection</h3>
-              <p className="text-xs text-hubspot-gray-500 mt-1">
-                Automatically filter out spam submissions with our AI-powered protection.
-              </p>
-            </div>
-            <div className="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
-              <input 
-                type="checkbox"
-                id="spamProtection"
-                className="opacity-0 w-0 h-0"
-                checked={spamProtection}
-                onChange={(e) => setSpamProtection(e.target.checked)}
-              />
-              <label 
-                htmlFor="spamProtection"
-                className={`absolute top-0 left-0 right-0 bottom-0 rounded-full cursor-pointer transition-colors duration-200 ${spamProtection ? 'bg-hubspot-green' : 'bg-hubspot-gray-300'}`}
-              >
-                <span 
-                  className={`absolute left-1 bottom-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ${spamProtection ? 'transform translate-x-6' : ''}`}
-                ></span>
-              </label>
-            </div>
+          <div className="py-4 border-t border-hubspot-gray-200">
+            <Toggle
+              id="spamProtection"
+              checked={spamProtection}
+              onChange={setSpamProtection}
+              label="Spam Protection"
+              description="Automatically filter out spam submissions with our AI-powered protection."
+            />
           </div>
           
           {/* Email Notification Settings */}
           <div className="py-4 border-t border-hubspot-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-sm font-medium text-hubspot-blue-dark">Email Notifications</h3>
-                <p className="text-xs text-hubspot-gray-500 mt-1">
-                  Get notified by email when you receive a new submission.
-                </p>
-              </div>
-              <div className="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
-                <input 
-                  type="checkbox"
-                  id="emailNotifications"
-                  className="opacity-0 w-0 h-0"
-                  checked={emailNotifications}
-                  onChange={(e) => setEmailNotifications(e.target.checked)}
-                />
-                <label 
-                  htmlFor="emailNotifications"
-                  className={`absolute top-0 left-0 right-0 bottom-0 rounded-full cursor-pointer transition-colors duration-200 ${emailNotifications ? 'bg-hubspot-green' : 'bg-hubspot-gray-300'}`}
-                >
-                  <span 
-                    className={`absolute left-1 bottom-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ${emailNotifications ? 'transform translate-x-6' : ''}`}
-                  ></span>
-                </label>
-              </div>
+            <div className="mb-4">
+              <Toggle
+                id="emailNotifications"
+                checked={emailNotifications}
+                onChange={setEmailNotifications}
+                label="Email Notifications"
+                description="Get notified by email when you receive a new submission."
+              />
             </div>
             
             {emailNotifications && (

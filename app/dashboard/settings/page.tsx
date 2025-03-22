@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PageHeader } from '@/app/components/ui/page-header';
+import { Toggle } from '@/app/components/ui/toggle';
 
 // Mock user data - in a real app this would come from an API
 const mockUser = {
@@ -26,6 +27,8 @@ const mockUser = {
 };
 
 export default function SettingsPage() {
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  
   // Format date for display
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -98,7 +101,7 @@ export default function SettingsPage() {
             <div className="bg-hubspot-blue-50 border border-hubspot-blue-200 rounded-hubspot p-5">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-xl font-semibold text-hubspot-blue-dark">{mockUser.subscription.plan}</h3>
-                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-hubspot-green-light text-hubspot-green-dark">
+                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-hubspot-orange-light text-hubspot-orange-dark">
                   {mockUser.subscription.status}
                 </span>
               </div>
@@ -123,7 +126,7 @@ export default function SettingsPage() {
             <ul className="space-y-2">
               {mockUser.subscription.features.map((feature, index) => (
                 <li key={index} className="flex items-center text-hubspot-gray-700">
-                  <svg className="h-5 w-5 text-hubspot-green-dark mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-hubspot-orange mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {feature}
@@ -143,15 +146,14 @@ export default function SettingsPage() {
         <h2 className="text-lg font-medium text-hubspot-blue-dark mb-6">Account Settings</h2>
         
         <div className="space-y-4">
-          <div className="flex justify-between items-center p-4 border border-hubspot-gray-200 rounded-hubspot">
-            <div>
-              <h3 className="font-medium text-hubspot-blue-dark">Email Notifications</h3>
-              <p className="text-sm text-hubspot-gray-600">Receive email notifications for form submissions and account updates</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-11 h-6 bg-hubspot-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-hubspot-orange"></div>
-            </label>
+          <div className="p-4 border border-hubspot-gray-200 rounded-hubspot">
+            <Toggle
+              id="emailNotifications"
+              checked={emailNotifications}
+              onChange={setEmailNotifications}
+              label="Email Notifications"
+              description="Receive email notifications for form submissions and account updates"
+            />
           </div>
           
           <div className="flex justify-between items-center p-4 border border-hubspot-gray-200 rounded-hubspot">

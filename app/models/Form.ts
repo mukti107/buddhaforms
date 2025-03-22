@@ -14,10 +14,6 @@ const FormSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  emailTo: {
-    type: String,
-    required: true,
-  },
   active: {
     type: Boolean,
     default: true,

@@ -13,14 +13,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, emailTo } = await req.json();
+    const { name, settings } = await req.json();
     
     const formId = nanoid(10);
     const form = await Form.create({
       userId: session.user.sub,
       formId,
       name,
-      emailTo,
+      settings: {
+        emailNotifications: true,
+        notificationEmail: settings?.notificationEmail,
+        honeypot: false,
+        dataRetention: 'forever'
+      }
     });
 
     return NextResponse.json({ form });

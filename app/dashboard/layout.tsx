@@ -8,7 +8,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 
 interface CreateFormData {
   name: string;
-  emailTo: string;
+  settings: {
+    notificationEmail: string;
+  };
 }
 
 // Fetcher function for SWR
@@ -71,6 +73,18 @@ export default function DashboardLayout({
     setSidebarOpen(false);
   }, [pathname]);
 
+  // Add event listener for opening create form modal
+  useEffect(() => {
+    const handleOpenCreateFormModal = () => {
+      setIsCreateFormModalOpen(true);
+    };
+
+    document.addEventListener('openCreateFormModal', handleOpenCreateFormModal);
+    return () => {
+      document.removeEventListener('openCreateFormModal', handleOpenCreateFormModal);
+    };
+  }, []);
+
   const isActive = (path: string) => {
     if (path === "/dashboard" && pathname === "/dashboard") {
       return true;
@@ -99,7 +113,9 @@ export default function DashboardLayout({
         },
         body: JSON.stringify({ 
           name: formName, 
-          emailTo 
+          settings: {
+            notificationEmail: emailTo
+          }
         } as CreateFormData),
       });
 
@@ -233,7 +249,7 @@ export default function DashboardLayout({
               <span>Submissions</span>
             </Link>
 
-            <Link
+            {/* <Link
               href="/dashboard/settings"
               className={`sidebar-link text-sm ${isActive("/dashboard/settings") ? "active" : ""}`}
             >
@@ -252,7 +268,7 @@ export default function DashboardLayout({
                 />
               </svg>
               <span>Settings</span>
-            </Link>
+            </Link> */}
             
             <div className="pt-3 mt-3 border-t border-buddha-gray-200">
               <a href="https://docs.buddhaforms.com" target="_blank" rel="noopener noreferrer" className="sidebar-link text-sm">

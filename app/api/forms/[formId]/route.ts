@@ -4,7 +4,6 @@ import { getSession } from '@auth0/nextjs-auth0';
 
 interface UpdateFormData {
   name: string;
-  emailTo: string;
   active: boolean;
   settings: {
     honeypot: boolean;
@@ -85,8 +84,8 @@ export async function PUT(
     const data: UpdateFormData = await req.json();
 
     // Validate required fields
-    if (!data.name?.trim() || !data.emailTo?.trim()) {
-      return NextResponse.json({ error: 'Form name and email are required' }, { status: 400 });
+    if (!data.name?.trim()) {
+      return NextResponse.json({ error: 'Form name is required' }, { status: 400 });
     }
 
     // Find and update the form
@@ -98,7 +97,6 @@ export async function PUT(
       {
         $set: {
           name: data.name,
-          emailTo: data.emailTo,
           active: data.active,
           settings: {
             honeypot: data.settings.honeypot,

@@ -10,7 +10,6 @@ import { Toggle } from '@/app/components/ui/toggle';
 interface Form {
   formId: string;
   name: string;
-  emailTo: string;
   active: boolean;
   settings?: {
     emailNotifications: boolean;
@@ -34,7 +33,6 @@ export default function EditFormPage() {
 
   // State for form fields
   const [name, setName] = useState(form?.name || '');
-  const [emailTo, setEmailTo] = useState(form?.emailTo || '');
   const [active, setActive] = useState(form?.active || false);
   const [spamProtection, setSpamProtection] = useState(form?.settings?.honeypot || false);
   const [dataRetention, setDataRetention] = useState(form?.settings?.dataRetention || 'forever');
@@ -49,7 +47,6 @@ export default function EditFormPage() {
   React.useEffect(() => {
     if (form) {
       setName(form.name);
-      setEmailTo(form.emailTo);
       setActive(form.active);
       setSpamProtection(form.settings?.honeypot || false);
       setDataRetention(form.settings?.dataRetention || 'forever');
@@ -103,7 +100,6 @@ export default function EditFormPage() {
         },
         body: JSON.stringify({
           name,
-          emailTo,
           active,
           settings: {
             honeypot: spamProtection,
@@ -222,27 +218,8 @@ export default function EditFormPage() {
             </p>
           </div>
           
-          {/* Recipient Email */}
-          <div className="mb-6">
-            <label htmlFor="emailTo" className="block text-sm font-medium text-buddha-gray-700 mb-1">
-              Form Submissions Email
-            </label>
-            <input
-              type="email"
-              id="emailTo"
-              value={emailTo}
-              onChange={(e) => setEmailTo(e.target.value)}
-              className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
-              placeholder="email@example.com"
-              required
-            />
-            <p className="mt-1 text-xs text-buddha-gray-500">
-              Form submissions will be sent to this email address.
-            </p>
-          </div>
-          
           {/* Toggle for Form Activation */}
-          <div className="flex py-4 border-b border-buddha-gray-200">
+          <div className="py-4 border-b border-buddha-gray-200">
             <Toggle
               id="formStatus"
               checked={active}

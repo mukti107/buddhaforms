@@ -83,7 +83,7 @@ export default function Dashboard() {
 
   // Calculate dashboard stats
   const formCount = forms.length;
-  const activeFormCount = forms.filter(form => form.active).length;
+  const activeFormCount = forms.filter((form: Form) => form.active).length;
   const submissionCount = submissionsData?.pagination?.total || 0;
 
   return (
@@ -122,7 +122,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="space-y-3">
-              {recentSubmissions.map((submission) => (
+              {recentSubmissions.map((submission: Submission) => (
                 <Link 
                   key={submission.id}
                   href={`/dashboard/submissions/${submission.id}`}
@@ -151,7 +151,7 @@ export default function Dashboard() {
           </div>
           
           <div className="space-y-3">
-            {forms.map((form) => (
+            {forms.map((form: Form) => (
               <Link 
                 key={form.formId} 
                 href={`/dashboard/forms/${form.formId}`}

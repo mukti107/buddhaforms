@@ -2,13 +2,17 @@
 
 import PageHeader from '@/app/components/PageHeader';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
+import { useRouter } from 'next/navigation';
 
 interface Form {
   formId: string;
   name: string;
-  emailTo: string;
+  settings: {
+    notificationEmail: string;
+    emailNotifications: boolean;
+  };
   createdAt: string;
   active: boolean;
   submissionCount: number;
@@ -18,7 +22,7 @@ interface Form {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function FormsPage() {
-
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
@@ -26,6 +30,13 @@ export default function FormsPage() {
   // Use SWR for data fetching
   const { data, error, isLoading } = useSWR('/api/forms', fetcher);
   const forms = data?.forms || [];
+
+  // Add redirect effect when no forms exist
+  useEffect(() => {
+    if (data && !isLoading && forms.length === 0) {
+      router.push('/dashboard');
+    }
+  }, [data, isLoading, forms.length, router]);
 
   const handleDelete = async (formId: string) => {
     if (!confirm('Are you sure you want to delete this form?')) {
@@ -72,7 +83,12 @@ export default function FormsPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: formName, emailTo }),
+        body: JSON.stringify({ 
+          name: formName, 
+          settings: {
+            notificationEmail: emailTo
+          }
+        }),
       });
 
       if (!response.ok) {
@@ -150,7 +166,7 @@ export default function FormsPage() {
                     Form Name
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
-                    Email Recipients
+                    Notification Email
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Created
@@ -174,7 +190,12 @@ export default function FormsPage() {
                       <div className="text-xs text-buddha-gray-500 mt-1">ID: {form.formId}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-buddha-gray-700">{form.emailTo}</div>
+                      <div className="text-sm text-buddha-gray-700">
+                        {form.settings?.notificationEmail || 'Not set'}
+                      </div>
+                      <div className="text-xs text-buddha-gray-500 mt-1">
+                        {form.settings?.emailNotifications ? 'Notifications enabled' : 'Notifications disabled'}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-buddha-gray-700">

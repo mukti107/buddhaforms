@@ -1,26 +1,62 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --background: #F5F8FA;
+  --foreground: #213343;
+  --font-family: 'Lexend', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #213343;
+    --foreground: #F5F8FA;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  * {
+    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  h1 {
+    @apply text-2xl font-semibold text-hubspot-blue-dark;
+  }
+  h2 {
+    @apply text-xl font-medium text-hubspot-blue-dark;
+  }
+  h3 {
+    @apply text-lg font-medium text-hubspot-blue-dark;
+  }
+}
+
+@layer components {
+  .btn-hubspot {
+    @apply bg-hubspot-orange hover:bg-hubspot-orange-dark text-white font-medium py-2 px-4 rounded-hubspot transition-colors duration-200;
+  }
+  
+  .btn-hubspot-secondary {
+    @apply bg-white hover:bg-hubspot-gray-100 text-hubspot-blue-dark border border-hubspot-gray-300 font-medium py-2 px-4 rounded-hubspot transition-colors duration-200;
+  }
+  
+  .card-hubspot {
+    @apply bg-white rounded-hubspot-md shadow-hubspot p-6 border border-hubspot-gray-200;
+  }
+  
+  .input-hubspot {
+    @apply border border-hubspot-gray-300 rounded-hubspot p-2 focus:ring-2 focus:ring-hubspot-orange focus:border-transparent outline-none;
+  }
+  
+  .sidebar-link {
+    @apply flex items-center gap-2 p-2 text-hubspot-gray-700 hover:text-hubspot-orange hover:bg-hubspot-gray-50 rounded-hubspot transition-colors duration-200;
+  }
+  
+  .sidebar-link.active {
+    @apply bg-hubspot-gray-100 text-hubspot-orange font-medium;
+  }
 }

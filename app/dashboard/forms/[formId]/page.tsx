@@ -126,12 +126,15 @@ export default function FormDetailPage({
           <p className="text-hubspot-gray-600 text-sm">Created on {formatDate(form.createdAt)}</p>
         </div>
         <div className="flex gap-3">
-          <button className="btn-hubspot-secondary flex items-center gap-1 text-sm">
+          <Link 
+            href={`/dashboard/forms/${formId}/edit`}
+            className="btn-hubspot-secondary flex items-center gap-1 text-sm"
+          >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
             <span>Edit Form</span>
-          </button>
+          </Link>
           <Link href={`/dashboard/forms/${formId}/submissions`} className="btn-hubspot text-sm">
             View All Submissions
           </Link>

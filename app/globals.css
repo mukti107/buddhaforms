@@ -59,4 +59,8 @@ body {
   .sidebar-link.active {
     @apply bg-hubspot-gray-100 text-hubspot-orange font-medium;
   }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-hubspot transition-colors duration-200;
+  }
 }

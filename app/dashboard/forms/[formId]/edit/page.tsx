@@ -66,6 +66,7 @@ export default function EditFormPage({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteChecked, setDeleteChecked] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   
   // Generate user-friendly data retention text
   const getDataRetentionText = (value: string) => {
@@ -83,6 +84,7 @@ export default function EditFormPage({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setSaveSuccess(false);
     
     // In a real app, you would call an API to update the form
     console.log('Updating form:', { 
@@ -96,7 +98,14 @@ export default function EditFormPage({
     // Simulate API call
     setTimeout(() => {
       setSaving(false);
-      router.push(`/dashboard/forms/${formId}`);
+      setSaveSuccess(true);
+      // No longer redirecting
+      // router.push(`/dashboard/forms/${formId}`);
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
     }, 800);
   };
   
@@ -150,6 +159,22 @@ export default function EditFormPage({
           </button>
         </div>
       </div>
+
+      {/* Success message */}
+      {saveSuccess && (
+        <div className="bg-green-50 border border-green-200 rounded-hubspot p-4 mb-6">
+          <div className="flex">
+            <svg className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-green-800">
+                Form settings saved successfully!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form settings */}
       <form onSubmit={handleSubmit} className="space-y-6">

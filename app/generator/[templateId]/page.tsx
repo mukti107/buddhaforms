@@ -240,151 +240,136 @@ export default function TemplateDetailPage({ params }: { params: { templateId: s
   const generateHtmlCode = (template: any) => {
     if (!template || !template.fields) return;
     
-    let formHtml = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${template.title}</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        button {
-            background-color: #FF7A59;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #F15B2A;
-        }
-        .radio-group, .checkbox-group {
-            margin-top: 5px;
-        }
-        .radio-option, .checkbox-option {
-            margin-bottom: 5px;
-        }
-        .required {
-            color: #e74c3c;
-        }
-    </style>
-</head>
-<body>
-    <h2>${template.title}</h2>
-    <p>${template.description}</p>
-    
-    <form id="${template.id}-form" action="#" method="POST">
-`;
+    // Form HTML only
+    let formHtml = `<!-- ${template.title} -->
+<form id="${template.id}" action="#" method="POST">`;
 
     // Add form fields
     template.fields.forEach((field: any) => {
       const requiredMark = field.required ? '<span class="required">*</span>' : '';
       
       formHtml += `
-        <div class="form-group">
-            <label for="${field.name}">${field.label} ${requiredMark}</label>`;
+  <div class="form-group">
+    <label for="${field.name}">${field.label} ${requiredMark}</label>`;
             
       if (field.type === 'textarea') {
         formHtml += `
-            <textarea id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}></textarea>`;
+    <textarea id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}></textarea>`;
       } else if (field.type === 'select') {
         formHtml += `
-            <select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
-                <option value="" disabled selected>Select an option</option>`;
+    <select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
+      <option value="" disabled selected>Select an option</option>`;
                 
         field.options?.forEach((option: string) => {
           formHtml += `
-                <option value="${option.toLowerCase().replace(/\s+/g, '-')}">${option}</option>`;
+      <option value="${option.toLowerCase().replace(/\s+/g, '-')}">${option}</option>`;
         });
         
         formHtml += `
-            </select>`;
+    </select>`;
       } else if (field.type === 'radio') {
         formHtml += `
-            <div class="radio-group">`;
+    <div class="radio-group">`;
             
         field.options?.forEach((option: string, idx: number) => {
           formHtml += `
-                <div class="radio-option">
-                    <input type="radio" id="${field.name}-${idx}" name="${field.name}" value="${option.toLowerCase().replace(/\s+/g, '-')}" ${idx === 0 && field.required ? 'required' : ''}>
-                    <label for="${field.name}-${idx}">${option}</label>
-                </div>`;
+      <div class="radio-option">
+        <input type="radio" id="${field.name}-${idx}" name="${field.name}" value="${option.toLowerCase().replace(/\s+/g, '-')}" ${idx === 0 && field.required ? 'required' : ''}>
+        <label for="${field.name}-${idx}">${option}</label>
+      </div>`;
         });
         
         formHtml += `
-            </div>`;
+    </div>`;
       } else if (field.type === 'checkbox') {
         formHtml += `
-            <div class="checkbox-group">`;
+    <div class="checkbox-group">`;
             
         field.options?.forEach((option: string, idx: number) => {
           formHtml += `
-                <div class="checkbox-option">
-                    <input type="checkbox" id="${field.name}-${idx}" name="${field.name}[]" value="${option.toLowerCase().replace(/\s+/g, '-')}">
-                    <label for="${field.name}-${idx}">${option}</label>
-                </div>`;
+      <div class="checkbox-option">
+        <input type="checkbox" id="${field.name}-${idx}" name="${field.name}[]" value="${option.toLowerCase().replace(/\s+/g, '-')}">
+        <label for="${field.name}-${idx}">${option}</label>
+      </div>`;
         });
         
         formHtml += `
-            </div>`;
+    </div>`;
       } else {
         formHtml += `
-            <input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>`;
+    <input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>`;
       }
       
       formHtml += `
-        </div>`;
+  </div>`;
     });
     
     // Add submit button
     formHtml += `
-        <div class="form-group">
-            <button type="submit">Submit</button>
-        </div>
-    </form>
-    
-    <script>
-        document.getElementById('${template.id}-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Form submitted! In a real implementation, this would send data to your server.');
-            this.reset();
-        });
-    </script>
-</body>
-</html>`;
+  <div class="form-group">
+    <button type="submit">Submit</button>
+  </div>
+</form>
+
+<!-- Form CSS Styles -->
+<style>
+  .form-group {
+    margin-bottom: 15px;
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  button {
+    background-color: #FF7A59;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #F15B2A;
+  }
+  .radio-group, .checkbox-group {
+    margin-top: 5px;
+  }
+  .radio-option, .checkbox-option {
+    margin-bottom: 5px;
+  }
+  .required {
+    color: #e74c3c;
+  }
+</style>
+
+<!-- Form JavaScript -->
+<script>
+  document.getElementById('${template.id}').addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert('Form submitted! In a real implementation, this would send data to your server.');
+    this.reset();
+  });
+</script>`;
     
     setHtmlCode(formHtml);
   };

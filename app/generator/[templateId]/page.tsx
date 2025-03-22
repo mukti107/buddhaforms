@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, useParams } from 'next/navigation';
-import CodeEditor from '@/app/components/ui/CodeEditor';
+import { useRouter } from 'next/navigation';
 
 // Import form templates from parent page
 const formTemplates = [
   {
-    id: 'contact',
+    id: 'contact-form',
     title: 'Contact form',
     description: 'Create a simple contact form to collect messages from visitors',
     icon: '✉️',
@@ -20,7 +19,7 @@ const formTemplates = [
     ]
   },
   {
-    id: 'feedback',
+    id: 'feedback-form',
     title: 'Feedback form',
     description: 'Gather feedback about your products or services',
     icon: '📝',
@@ -32,7 +31,7 @@ const formTemplates = [
     ]
   },
   {
-    id: 'survey',
+    id: 'survey-form',
     title: 'Survey form',
     description: 'Create surveys with multiple question types',
     icon: '📊',
@@ -44,9 +43,8 @@ const formTemplates = [
       { type: 'textarea', name: 'comments', label: 'Additional Comments', required: false },
     ]
   },
-  // Add more templates here (abbreviated for brevity)
   {
-    id: 'order',
+    id: 'order-form',
     title: 'Order form',
     description: 'Accept orders and collect payment information',
     icon: '🛒',
@@ -58,19 +56,174 @@ const formTemplates = [
       { type: 'number', name: 'quantity', label: 'Quantity', required: true },
     ]
   },
+  {
+    id: 'donation-form',
+    title: 'Donation form',
+    description: 'Collect donations for your cause or organization',
+    icon: '💰',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'select', name: 'donationAmount', label: 'Donation Amount', options: ['$10', '$25', '$50', '$100', 'Other'], required: true },
+      { type: 'number', name: 'customAmount', label: 'Custom Amount (if Other)', required: false },
+      { type: 'checkbox', name: 'recurring', label: 'Make this a monthly donation', options: ['Yes'], required: false },
+    ]
+  },
+  {
+    id: 'booking-form',
+    title: 'Booking form',
+    description: 'Let visitors book appointments or services',
+    icon: '📅',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'tel', name: 'phone', label: 'Phone Number', required: true },
+      { type: 'select', name: 'service', label: 'Service', options: ['Service A', 'Service B', 'Service C'], required: true },
+      { type: 'date', name: 'date', label: 'Preferred Date', required: true },
+      { type: 'select', name: 'time', label: 'Preferred Time', options: ['Morning', 'Afternoon', 'Evening'], required: true },
+    ]
+  },
+  {
+    id: 'login-form',
+    title: 'Login form',
+    description: 'Create a login form for your website or application',
+    icon: '🔐',
+    fields: [
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'password', name: 'password', label: 'Password', required: true },
+      { type: 'checkbox', name: 'remember', label: 'Remember me', options: ['Yes'], required: false },
+    ]
+  },
+  {
+    id: 'quiz-form',
+    title: 'Quiz form',
+    description: 'Build interactive quizzes and assessments',
+    icon: '❓',
+    fields: [
+      { type: 'text', name: 'name', label: 'Your Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'radio', name: 'question1', label: 'Question 1: What is the capital of France?', options: ['London', 'Berlin', 'Paris', 'Madrid'], required: true },
+      { type: 'radio', name: 'question2', label: 'Question 2: Which planet is closest to the sun?', options: ['Earth', 'Venus', 'Mercury', 'Mars'], required: true },
+      { type: 'radio', name: 'question3', label: 'Question 3: Who painted the Mona Lisa?', options: ['Van Gogh', 'Picasso', 'Da Vinci', 'Michelangelo'], required: true },
+    ]
+  },
+  {
+    id: 'appointment-form',
+    title: 'Appointment booking form',
+    description: 'Schedule appointments with availability options',
+    icon: '⏰',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'tel', name: 'phone', label: 'Phone Number', required: true },
+      { type: 'date', name: 'date', label: 'Appointment Date', required: true },
+      { type: 'select', name: 'time', label: 'Preferred Time', options: ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'], required: true },
+      { type: 'textarea', name: 'notes', label: 'Additional Notes', required: false },
+    ]
+  },
+  {
+    id: 'event-registration-form',
+    title: 'Event registration form',
+    description: 'Register attendees for your events',
+    icon: '🎫',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'tel', name: 'phone', label: 'Phone Number', required: true },
+      { type: 'select', name: 'ticketType', label: 'Ticket Type', options: ['General Admission', 'VIP', 'Student'], required: true },
+      { type: 'number', name: 'quantity', label: 'Number of Tickets', required: true },
+      { type: 'checkbox', name: 'dietary', label: 'Dietary Restrictions', options: ['Vegetarian', 'Vegan', 'Gluten-free', 'None'], required: false },
+    ]
+  },
+  {
+    id: 'newsletter-signup-form',
+    title: 'Newsletter signup form',
+    description: 'Grow your email list with a newsletter signup form',
+    icon: '📧',
+    fields: [
+      { type: 'text', name: 'name', label: 'First Name', required: false },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'checkbox', name: 'interests', label: 'Interests', options: ['News', 'Updates', 'Promotions', 'Events'], required: false },
+      { type: 'checkbox', name: 'consent', label: 'I agree to receive newsletters', options: ['Yes'], required: true },
+    ]
+  },
+  {
+    id: 'registration-form',
+    title: 'Registration form',
+    description: 'Register users for your service or platform',
+    icon: '👤',
+    fields: [
+      { type: 'text', name: 'firstName', label: 'First Name', required: true },
+      { type: 'text', name: 'lastName', label: 'Last Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'password', name: 'password', label: 'Password', required: true },
+      { type: 'password', name: 'confirmPassword', label: 'Confirm Password', required: true },
+      { type: 'checkbox', name: 'terms', label: 'I agree to the Terms and Conditions', options: ['Yes'], required: true },
+    ]
+  },
+  {
+    id: 'email-subscription-form',
+    title: 'Email subscription form',
+    description: 'Simple email signup form for your subscribers',
+    icon: '✅',
+    fields: [
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'checkbox', name: 'consent', label: 'I agree to receive emails', options: ['Yes'], required: true },
+    ]
+  },
+  {
+    id: 'customer-satisfaction-survey',
+    title: 'Customer satisfaction survey',
+    description: 'Measure customer satisfaction and collect feedback',
+    icon: '😊',
+    fields: [
+      { type: 'text', name: 'name', label: 'Your Name', required: false },
+      { type: 'email', name: 'email', label: 'Email Address', required: false },
+      { type: 'radio', name: 'satisfaction', label: 'How satisfied are you with our service?', options: ['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'], required: true },
+      { type: 'radio', name: 'recommendation', label: 'How likely are you to recommend us to others?', options: ['Very Likely', 'Likely', 'Neutral', 'Unlikely', 'Very Unlikely'], required: true },
+      { type: 'textarea', name: 'feedback', label: 'What could we do to improve?', required: false },
+    ]
+  },
+  {
+    id: 'product-return-form',
+    title: 'Product return form',
+    description: 'Process product returns and exchanges',
+    icon: '↩️',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'text', name: 'orderNumber', label: 'Order Number', required: true },
+      { type: 'text', name: 'productName', label: 'Product Name', required: true },
+      { type: 'radio', name: 'returnReason', label: 'Reason for Return', options: ['Wrong Item', 'Defective', 'Not as Described', 'Changed Mind', 'Other'], required: true },
+      { type: 'radio', name: 'action', label: 'Preferred Action', options: ['Refund', 'Exchange', 'Store Credit'], required: true },
+      { type: 'textarea', name: 'comments', label: 'Additional Comments', required: false },
+    ]
+  },
+  {
+    id: 'volunteer-signup-form',
+    title: 'Volunteer Signup form',
+    description: 'Recruit volunteers for your organization',
+    icon: '🤝',
+    fields: [
+      { type: 'text', name: 'name', label: 'Full Name', required: true },
+      { type: 'email', name: 'email', label: 'Email Address', required: true },
+      { type: 'tel', name: 'phone', label: 'Phone Number', required: true },
+      { type: 'checkbox', name: 'availability', label: 'Availability', options: ['Weekdays', 'Weekends', 'Evenings', 'Mornings'], required: true },
+      { type: 'checkbox', name: 'interests', label: 'Areas of Interest', options: ['Event Support', 'Administration', 'Fundraising', 'Marketing', 'Community Outreach'], required: true },
+      { type: 'textarea', name: 'experience', label: 'Relevant Experience', required: false },
+    ]
+  },
 ];
 
-export default function TemplateDetailPage() {
+export default function TemplateDetailPage({ params }: { params: { templateId: string } }) {
   const router = useRouter();
-  const params = useParams();
-  const templateId = params.templateId as string;
-  
   const [template, setTemplate] = useState<any>(null);
   const [htmlCode, setHtmlCode] = useState<string>('');
+  const [copied, setCopied] = useState(false);
   
   useEffect(() => {
     // Find the template from the template ID
-    const selectedTemplate = formTemplates.find(t => t.id === templateId);
+    const selectedTemplate = formTemplates.find(t => t.id === params.templateId);
     
     if (!selectedTemplate) {
       // Redirect to the main generator page if template not found
@@ -82,7 +235,7 @@ export default function TemplateDetailPage() {
     
     // Generate HTML code for the template
     generateHtmlCode(selectedTemplate);
-  }, [templateId, router]);
+  }, [params.templateId, router]);
   
   const generateHtmlCode = (template: any) => {
     if (!template || !template.fields) return;
@@ -236,6 +389,13 @@ export default function TemplateDetailPage() {
     setHtmlCode(formHtml);
   };
   
+  const copyHtmlToClipboard = () => {
+    navigator.clipboard.writeText(htmlCode).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+  
   if (!template) {
     return (
       <div className="min-h-screen bg-buddha-gray-50 flex items-center justify-center">
@@ -381,13 +541,19 @@ export default function TemplateDetailPage() {
             <div className="w-full md:w-1/2 p-8">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-buddha-blue-dark">HTML Code</h2>
+                <button 
+                  onClick={copyHtmlToClipboard}
+                  className={`text-sm px-3 py-1 rounded-buddha ${copied ? 'bg-green-500 text-white' : 'bg-buddha-gray-100 text-buddha-gray-700 hover:bg-buddha-gray-200'}`}
+                >
+                  {copied ? 'Copied!' : 'Copy Code'}
+                </button>
               </div>
               
-              <CodeEditor 
-                code={htmlCode} 
-                language="html" 
-                theme="github-dark" 
-              />
+              <div className="bg-gray-900 text-gray-200 p-4 rounded-buddha overflow-auto max-h-[500px]">
+                <pre className="text-xs">
+                  <code>{htmlCode}</code>
+                </pre>
+              </div>
               
               <div className="mt-6">
                 <h3 className="text-lg font-medium text-buddha-blue-dark mb-2">How to use this form</h3>

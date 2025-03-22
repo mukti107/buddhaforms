@@ -11,6 +11,10 @@ interface Form {
   name: string;
   active: boolean;
   createdAt: string;
+  settings?: {
+    notificationEmail: string;
+    emailNotifications: boolean;
+  };
 }
 
 interface Submission {
@@ -165,7 +169,9 @@ export default function Dashboard() {
                   </div>
                   <div>
                     <div className="font-medium text-buddha-blue-dark">{form.name}</div>
-                    <div className="text-sm text-buddha-gray-600">Created {formatDate(form.createdAt)}</div>
+                    <div className="text-sm text-buddha-gray-600">
+                      {form.settings?.notificationEmail || 'No notification email set'}
+                    </div>
                   </div>
                 </div>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

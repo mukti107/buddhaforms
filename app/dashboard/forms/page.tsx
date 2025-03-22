@@ -1,18 +1,16 @@
 "use client";  // Add this directive at the top
 
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, mockForms, getSubmissionsByForm } from '../../lib/mockData';
 import PageHeader from '@/app/components/PageHeader';
-import { ConfettiButton, fireConfettiFireworks, ConfettiRef, Confetti } from '@/app/components/ui/confetti';
 
 export default function FormsPage() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
-  const confettiRef = useRef<ConfettiRef>(null);
   
   // Use mock data from our mockData file
   const forms = mockForms.map(form => ({
@@ -57,12 +55,8 @@ export default function FormsPage() {
     setEmailTo('');
     setIsModalOpen(false);
 
-    // Wait for the modal to close before showing confetti
+    // Show success message
     setTimeout(() => {
-      // Show a fireworks confetti effect
-      fireConfettiFireworks();
-      
-      // Show success message
       alert(`Form "${formName}" created successfully!`);
     }, 100);
   };
@@ -74,16 +68,13 @@ export default function FormsPage() {
     </svg>
   );
   
-  // Create Form action with confetti
+  // Create Form action
   const handleCreateFormClick = () => {
     setIsModalOpen(true);
   };
 
   return (
     <div className="space-y-6">
-      {/* Add confetti component with manual start */}
-      <Confetti ref={confettiRef} manualStart={true} />
-
       <PageHeader
         title="My Forms"
         description="Manage all your forms and their submissions"

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import useSWR from 'swr';
 import PageHeader from '@/app/components/PageHeader';
+import { Suspense } from 'react';
 
 interface Submission {
   id: string;
@@ -26,7 +27,7 @@ interface PaginationData {
 // Fetcher function for SWR
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-export default function SubmissionsPage() {
+function SubmissionsList() {
   const searchParams = useSearchParams();
   const formId = searchParams.get('formId');
   const page = searchParams.get('page') || '1';
@@ -196,3 +197,11 @@ export default function SubmissionsPage() {
     </div>
   );
 } 
+
+export default function SubmissionsPage() {
+  return (
+    <Suspense>
+      <SubmissionsList />
+    </Suspense>
+  );
+}

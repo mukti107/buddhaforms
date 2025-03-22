@@ -5,7 +5,6 @@
 :root {
   --background: #F5F8FA;
   --foreground: #213343;
-  --font-family: 'Lexend', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,9 +20,6 @@ body {
 }
 
 @layer base {
-  * {
-    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }
   h1 {
     @apply text-2xl font-semibold text-buddha-blue-dark;
   }

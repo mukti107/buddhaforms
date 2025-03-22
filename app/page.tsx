@@ -17,6 +17,12 @@ export default function HomePage() {
           {/* Right side with dashboard button */}
           <div className="flex items-center gap-3">
             <Link
+              href="/generator"
+              className="text-buddha-gray-700 hover:text-buddha-blue transition-colors px-3 py-2 text-sm font-medium"
+            >
+              Form Generator
+            </Link>
+            <Link
               href="/dashboard"
               className="btn-buddha flex items-center gap-1 text-sm"
             >

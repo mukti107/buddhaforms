@@ -121,23 +121,40 @@ export default function FormDetailPage() {
         <div className="card-buddha">
           <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Form Statistics</h2>
           <div className="space-y-4">
-            <div className="flex flex-col">
-              <span className="text-buddha-gray-600 text-xs">Total Submissions</span>
-              <span className="text-xl font-semibold text-buddha-blue-dark">
-                {form.submissionCount || recentSubmissions.length}
-              </span>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-buddha-gray-600 text-xs">Total Submissions</span>
+                <div className="text-xl font-semibold text-buddha-blue-dark">
+                  {form.submissionCount || recentSubmissions.length}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-buddha-gray-600 text-xs">Notifications Sent To</span>
-              <span className="text-buddha-blue-dark font-medium text-sm">
-                {form.settings?.emailNotifications ? 'Enabled' : 'Disabled'}
-              </span>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-buddha-gray-600 text-xs">Email Notifications</span>
+                <div className="text-sm text-buddha-blue-dark">
+                  {form.settings?.emailNotifications ? 'On' : 'Off'}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-buddha-gray-600 text-xs">Form Status</span>
-              <span className={`font-medium text-sm ${form.active ? 'text-buddha-green' : 'text-buddha-gray-500'}`}>
-                {form.active ? 'Active' : 'Inactive'}
-              </span>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-buddha-gray-600 text-xs">Notifications Sent To</span>
+                <div className="text-sm text-buddha-blue-dark">
+                  {form.settings?.notificationEmail || 'No email set'}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-buddha-gray-600 text-xs">Form Status</span>
+                <div className="text-sm text-buddha-blue-dark">
+                  {form.active ? 'Active' : 'Inactive'}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -229,7 +246,7 @@ export default function FormDetailPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-buddha-gray-200">
-                  {recentSubmissions.map((submission) => (
+                  {recentSubmissions.map((submission: Submission) => (
                     <tr key={submission.id} className="hover:bg-buddha-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-buddha-gray-600">
                         {formatDate(new Date(submission.submittedAt))}

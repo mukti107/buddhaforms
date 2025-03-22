@@ -20,8 +20,32 @@ export default function DashboardLayout({
   const [isCreateFormModalOpen, setIsCreateFormModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
+  const [shouldShowSidebar, setShouldShowSidebar] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Check if we should be showing the sidebar based on whether forms exist
+  useEffect(() => {
+    // Check if we should show empty state for demo purposes
+    const shouldShowEmptyState = localStorage.getItem('showEmptyState');
+    const hasSeenWelcome = shouldShowEmptyState === 'false';
+    
+    // Only show sidebar if we have forms
+    setShouldShowSidebar(hasSeenWelcome);
+  }, []);
+
+  // Listen for the formCreated event to show sidebar after form creation
+  useEffect(() => {
+    const handleFormCreated = () => {
+      setShouldShowSidebar(true);
+    };
+    
+    document.addEventListener('formCreated', handleFormCreated);
+    
+    return () => {
+      document.removeEventListener('formCreated', handleFormCreated);
+    };
+  }, []);
 
   // Listen for the custom event from dashboard page
   useEffect(() => {
@@ -108,153 +132,166 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-hubspot-gray-50">
       {/* Sidebar backdrop for mobile */}
-      {sidebarOpen && (
+      {shouldShowSidebar && sidebarOpen && (
         <div
           className="fixed inset-0 z-20 bg-hubspot-blue-dark/30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
-      {/* Sidebar */}
-      <div
-        id="sidebar"
-        className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white shadow-hubspot-md transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        {/* Logo and branding */}
-        <div className="flex h-16 items-center justify-center border-b border-hubspot-gray-200">
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-hubspot-orange flex items-center justify-center">
-              <span className="text-white font-bold">BF</span>
-            </div>
-            <span className="text-lg font-semibold text-hubspot-blue-dark">BuddhaForms</span>
-          </Link>
-        </div>
+      {/* Sidebar - only show when shouldShowSidebar is true */}
+      {shouldShowSidebar && (
+        <div
+          id="sidebar"
+          className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white shadow-hubspot-md transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-0 ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          {/* Logo and branding */}
+          <div className="flex h-16 items-center justify-center border-b border-hubspot-gray-200">
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-hubspot-orange flex items-center justify-center">
+                <span className="text-white font-bold">BF</span>
+              </div>
+              <span className="text-lg font-semibold text-hubspot-blue-dark">BuddhaForms</span>
+            </Link>
+          </div>
 
-        {/* User info */}
-        <div className="border-b border-hubspot-gray-200 p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <img
-              src={user.picture}
-              alt={user.name}
-              className="h-9 w-9 rounded-full border-2 border-hubspot-gray-100"
-            />
-            <div className="flex flex-col overflow-hidden">
-              <span className="font-medium text-sm text-hubspot-blue-dark truncate">{user.name}</span>
-              <span className="text-xs text-hubspot-gray-500 truncate">{user.email}</span>
+          {/* User info */}
+          <div className="border-b border-hubspot-gray-200 p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <img
+                src={user.picture}
+                alt={user.name}
+                className="h-9 w-9 rounded-full border-2 border-hubspot-gray-100"
+              />
+              <div className="flex flex-col overflow-hidden">
+                <span className="font-medium text-sm text-hubspot-blue-dark truncate">{user.name}</span>
+                <span className="text-xs text-hubspot-gray-500 truncate">{user.email}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-1">
-          <Link
-            href="/dashboard"
-            className={`sidebar-link text-sm ${isActive("/dashboard") ? "active" : ""}`}
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            <span>Dashboard</span>
-          </Link>
-
-          {/* Always show Forms and Submissions links, they will be empty if no forms exist */}
-          <Link
-            href="/dashboard/forms"
-            className={`sidebar-link text-sm ${isActive("/dashboard/forms") ? "active" : ""}`}
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <span>My Forms</span>
-          </Link>
-
-          <Link
-            href="/dashboard/submissions"
-            className={`sidebar-link text-sm ${isActive("/dashboard/submissions") ? "active" : ""}`}
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-            <span>Submissions</span>
-          </Link>
-
-          <Link
-            href="/dashboard/settings"
-            className={`sidebar-link text-sm ${isActive("/dashboard/settings") ? "active" : ""}`}
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <span>Settings</span>
-          </Link>
-          
-          <div className="pt-3 mt-3 border-t border-hubspot-gray-200">
-            <a href="https://docs.buddhaforms.com" target="_blank" rel="noopener noreferrer" className="sidebar-link text-sm">
+          {/* Navigation */}
+          <nav className="p-4 space-y-1">
+            <Link
+              href="/dashboard"
+              className={`sidebar-link text-sm ${isActive("/dashboard") ? "active" : ""}`}
+            >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                 />
               </svg>
-              <span>Documentation</span>
-            </a>
-          </div>
-        </nav>
-      </div>
+              <span>Dashboard</span>
+            </Link>
+
+            {/* Always show Forms and Submissions links, they will be empty if no forms exist */}
+            <Link
+              href="/dashboard/forms"
+              className={`sidebar-link text-sm ${isActive("/dashboard/forms") ? "active" : ""}`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span>My Forms</span>
+            </Link>
+
+            <Link
+              href="/dashboard/submissions"
+              className={`sidebar-link text-sm ${isActive("/dashboard/submissions") ? "active" : ""}`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              <span>Submissions</span>
+            </Link>
+
+            <Link
+              href="/dashboard/settings"
+              className={`sidebar-link text-sm ${isActive("/dashboard/settings") ? "active" : ""}`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span>Settings</span>
+            </Link>
+            
+            <div className="pt-3 mt-3 border-t border-hubspot-gray-200">
+              <a href="https://docs.buddhaforms.com" target="_blank" rel="noopener noreferrer" className="sidebar-link text-sm">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+                <span>Documentation</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      )}
 
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Header */}
+        {/* Header - always show, but with modified styling based on sidebar visibility */}
         <header className="bg-white border-b border-hubspot-gray-200 h-16 flex items-center justify-between px-4 lg:px-6">
-          <button
-            id="sidebar-toggle"
-            className="text-hubspot-gray-700 lg:hidden"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {shouldShowSidebar ? (
+            /* Show sidebar toggle when sidebar is present */
+            <button
+              id="sidebar-toggle"
+              className="text-hubspot-gray-700 lg:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          ) : (
+            /* Show logo when sidebar is hidden */
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-hubspot-orange flex items-center justify-center">
+                <span className="text-white font-bold">BF</span>
+              </div>
+              <span className="text-lg font-semibold text-hubspot-blue-dark">BuddhaForms</span>
+            </Link>
+          )}
 
           <div className="flex items-center gap-3 ml-auto">
             <button 
@@ -275,7 +312,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-4 lg:p-6">
+        <main className={`flex-1 overflow-auto ${shouldShowSidebar ? 'p-4 lg:p-6' : ''}`}>
           {children}
         </main>
       </div>

@@ -138,17 +138,6 @@ export default function FormDetailPage({
         </div>
       </div>
 
-      {/* Status badge */}
-      <div className="flex">
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-          form.active 
-            ? 'bg-hubspot-green-light text-hubspot-green-dark' 
-            : 'bg-hubspot-gray-200 text-hubspot-gray-700'
-        }`}>
-          {form.active ? 'Active' : 'Inactive'}
-        </span>
-      </div>
-
       {/* Content grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Form stats */}
@@ -178,27 +167,17 @@ export default function FormDetailPage({
         <div className="card-hubspot lg:col-span-2">
           <h2 className="text-lg font-medium text-hubspot-blue-dark mb-4">Integration Code</h2>
           <div className="bg-hubspot-gray-50 p-4 rounded-hubspot border border-hubspot-gray-200 overflow-x-auto">
-            <pre className="text-sm text-hubspot-gray-800 whitespace-pre-wrap">
-{`<form action="https://api.buddhaforms.com/submit/${formId}" method="post">
-  <input type="text" name="name" placeholder="Your name" required />
-  <input type="email" name="email" placeholder="Your email" required />
-  <textarea name="message" placeholder="Your message" required></textarea>
-  <button type="submit">Send</button>
-</form>`}
-            </pre>
+            <p className="text-sm text-hubspot-gray-700 mb-2">Use this form action URL in your HTML form:</p>
+            <div className="text-sm font-mono text-hubspot-gray-800 p-2 bg-white border border-hubspot-gray-200 rounded-hubspot">
+              <code>https://api.buddhaforms.com/submit/{formId}</code>
+            </div>
           </div>
           <div className="mt-4 flex gap-3">
             <button className="btn-hubspot-secondary text-sm flex items-center gap-1">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-              <span>Copy Code</span>
-            </button>
-            <button className="btn-hubspot-secondary text-sm flex items-center gap-1">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              <span>Download</span>
+              <span>Copy URL</span>
             </button>
           </div>
         </div>
@@ -252,9 +231,12 @@ export default function FormDetailPage({
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                        <button className="text-hubspot-orange hover:text-hubspot-orange-dark font-medium">
+                        <Link 
+                          href={`/dashboard/submissions/${submission.id}`}
+                          className="text-hubspot-orange hover:text-hubspot-orange-dark font-medium"
+                        >
                           View Details
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

@@ -19,10 +19,10 @@ export default function SubmissionDetailPage({
   
   if (!submission) {
     return (
-      <div className="card-hubspot text-center p-8">
-        <h1 className="text-xl font-semibold text-hubspot-blue-dark mb-4">Submission Not Found</h1>
-        <p className="mb-6 text-hubspot-gray-600 text-sm">The submission you're looking for doesn't exist or has been deleted.</p>
-        <Link href="/dashboard/submissions" className="btn-hubspot text-sm">
+      <div className="card-buddha text-center p-8">
+        <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Submission Not Found</h1>
+        <p className="mb-6 text-buddha-gray-600 text-sm">The submission you're looking for doesn't exist or has been deleted.</p>
+        <Link href="/dashboard/submissions" className="btn-buddha text-sm">
           Return to Submissions
         </Link>
       </div>
@@ -79,30 +79,30 @@ export default function SubmissionDetailPage({
       {/* Content */}
       <div className="grid grid-cols-1 gap-6">
         {/* Overview card */}
-        <div className="card-hubspot">
-          <h2 className="text-lg font-medium text-hubspot-blue-dark mb-4">Submission Overview</h2>
+        <div className="card-buddha">
+          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Submission Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <div>
               <div className="space-y-3">
                 <div>
-                  <p className="text-hubspot-gray-600 text-sm">Form</p>
-                  <p className="font-medium text-hubspot-blue-dark">{submission.formName}</p>
+                  <p className="text-buddha-gray-600 text-sm">Form</p>
+                  <p className="font-medium text-buddha-blue-dark">{submission.formName}</p>
                 </div>
                 <div>
-                  <p className="text-hubspot-gray-600 text-sm">Submission ID</p>
-                  <p className="font-medium text-hubspot-blue-dark">{submission.id}</p>
+                  <p className="text-buddha-gray-600 text-sm">Submission ID</p>
+                  <p className="font-medium text-buddha-blue-dark">{submission.id}</p>
                 </div>
               </div>
             </div>
             <div>
               <div className="space-y-3">
                 <div>
-                  <p className="text-hubspot-gray-600 text-sm">Received On</p>
-                  <p className="font-medium text-hubspot-blue-dark">{formatDate(submission.submittedAt)}</p>
+                  <p className="text-buddha-gray-600 text-sm">Received On</p>
+                  <p className="font-medium text-buddha-blue-dark">{formatDate(submission.submittedAt)}</p>
                 </div>
                 <div>
-                  <p className="text-hubspot-gray-600 text-sm">Status</p>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-hubspot-green-light text-hubspot-green-dark">
+                  <p className="text-buddha-gray-600 text-sm">Status</p>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-buddha-green-light text-buddha-green-dark">
                     {submission.read ? 'Read' : 'New'}
                   </span>
                 </div>
@@ -112,13 +112,13 @@ export default function SubmissionDetailPage({
         </div>
 
         {/* Submission data card */}
-        <div className="card-hubspot">
-          <h2 className="text-lg font-medium text-hubspot-blue-dark mb-4">Submission Data</h2>
+        <div className="card-buddha">
+          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Submission Data</h2>
           <div className="space-y-6">
             {Object.entries(submission.data).map(([key, value]) => (
-              <div key={key} className="border-b border-hubspot-gray-200 pb-4 last:border-0 last:pb-0">
-                <p className="text-hubspot-gray-600 text-sm mb-1 capitalize">{key}</p>
-                <div className="font-medium text-hubspot-blue-dark">
+              <div key={key} className="border-b border-buddha-gray-200 pb-4 last:border-0 last:pb-0">
+                <p className="text-buddha-gray-600 text-sm mb-1 capitalize">{key}</p>
+                <div className="font-medium text-buddha-blue-dark">
                   {typeof value === 'string' ? (
                     value
                   ) : Array.isArray(value) ? (
@@ -145,14 +145,14 @@ export default function SubmissionDetailPage({
               </svg>
               <span>Delete Submission</span>
             </button>
-            <button className="btn-hubspot-secondary text-sm flex items-center gap-1">
+            <button className="btn-buddha-secondary text-sm flex items-center gap-1">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" />
               </svg>
               <span>Export Data</span>
             </button>
           </div>
-          <Link href="/dashboard/submissions" className="text-hubspot-orange hover:text-hubspot-orange-dark text-sm font-medium">
+          <Link href="/dashboard/submissions" className="text-buddha-orange hover:text-buddha-orange-dark text-sm font-medium">
             Back to All Submissions
           </Link>
         </div>

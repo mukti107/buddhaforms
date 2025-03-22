@@ -16,7 +16,7 @@ const mockChartData = [
 
 const FormsAnalytics: React.FC = () => {
   return (
-    <Card className="card-hubspot h-full">
+    <Card className="card-buddha h-full">
       <div className="flex items-start justify-between px-6 pt-6">
         <CardHeader className="p-0">
           <CardTitle>Form Analytics</CardTitle>
@@ -24,10 +24,10 @@ const FormsAnalytics: React.FC = () => {
         </CardHeader>
         <div className="flex items-center space-x-2 pt-1">
           <div className="flex items-center mr-1">
-            <span className="w-3 h-3 bg-hubspot-orange rounded-full inline-block mr-1"></span>
-            <span className="text-hubspot-gray-600 text-sm">Submissions</span>
+            <span className="w-3 h-3 bg-buddha-orange rounded-full inline-block mr-1"></span>
+            <span className="text-buddha-gray-600 text-sm">Submissions</span>
           </div>
-          <select className="text-hubspot-gray-600 bg-hubspot-gray-50 border border-hubspot-gray-200 rounded-hubspot px-2 py-1 text-sm">
+          <select className="text-buddha-gray-600 bg-buddha-gray-50 border border-buddha-gray-200 rounded-buddha px-2 py-1 text-sm">
             <option>This month</option>
             <option>Last 30 days</option>
             <option>Last month</option>
@@ -42,13 +42,13 @@ const FormsAnalytics: React.FC = () => {
       <CardContent className="pt-4 pb-0">
         {/* Stats above the chart in a horizontal layout */}
         <div className="flex justify-between mb-4 px-1">
-          <div className="bg-hubspot-gray-50 rounded-hubspot p-3 flex-1 mr-3">
-            <div className="text-sm text-hubspot-gray-600">Total Forms</div>
-            <div className="text-2xl font-semibold text-hubspot-blue-dark">{mockChartData[mockChartData.length - 1].forms}</div>
+          <div className="bg-buddha-gray-50 rounded-buddha p-3 flex-1 mr-3">
+            <div className="text-sm text-buddha-gray-600">Total Forms</div>
+            <div className="text-2xl font-semibold text-buddha-blue-dark">{mockChartData[mockChartData.length - 1].forms}</div>
           </div>
-          <div className="bg-hubspot-gray-50 rounded-hubspot p-3 flex-1">
-            <div className="text-sm text-hubspot-gray-600">Total Submissions</div>
-            <div className="text-2xl font-semibold text-hubspot-blue-dark">{mockChartData[mockChartData.length - 1].submissions}</div>
+          <div className="bg-buddha-gray-50 rounded-buddha p-3 flex-1">
+            <div className="text-sm text-buddha-gray-600">Total Submissions</div>
+            <div className="text-2xl font-semibold text-buddha-blue-dark">{mockChartData[mockChartData.length - 1].submissions}</div>
           </div>
         </div>
         

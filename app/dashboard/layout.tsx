@@ -141,11 +141,11 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen bg-hubspot-gray-50">
+    <div className="flex h-screen bg-buddha-gray-50">
       {/* Sidebar backdrop for mobile */}
       {shouldShowSidebar && sidebarOpen && (
         <div
-          className="fixed inset-0 z-20 bg-hubspot-blue-dark/30 lg:hidden"
+          className="fixed inset-0 z-20 bg-buddha-blue-dark/30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
@@ -154,31 +154,31 @@ export default function DashboardLayout({
       {shouldShowSidebar && (
         <div
           id="sidebar"
-          className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white shadow-hubspot-md transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-0 ${
+          className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-white shadow-buddha-md transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-0 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Logo and branding */}
-          <div className="flex h-16 items-center justify-center border-b border-hubspot-gray-200">
+          <div className="flex h-16 items-center justify-center border-b border-buddha-gray-200">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-hubspot-orange flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-buddha-orange flex items-center justify-center">
                 <span className="text-white font-bold">BF</span>
               </div>
-              <span className="text-lg font-semibold text-hubspot-blue-dark">BuddhaForms</span>
+              <span className="text-lg font-semibold text-buddha-blue-dark">BuddhaForms</span>
             </Link>
           </div>
 
           {/* User info */}
-          <div className="border-b border-hubspot-gray-200 p-4">
+          <div className="border-b border-buddha-gray-200 p-4">
             <div className="flex items-center gap-3 mb-2">
               <img
                 src={user.picture}
                 alt={user.name}
-                className="h-9 w-9 rounded-full border-2 border-hubspot-gray-100"
+                className="h-9 w-9 rounded-full border-2 border-buddha-gray-100"
               />
               <div className="flex flex-col overflow-hidden">
-                <span className="font-medium text-sm text-hubspot-blue-dark truncate">{user.name}</span>
-                <span className="text-xs text-hubspot-gray-500 truncate">{user.email}</span>
+                <span className="font-medium text-sm text-buddha-blue-dark truncate">{user.name}</span>
+                <span className="text-xs text-buddha-gray-500 truncate">{user.email}</span>
               </div>
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function DashboardLayout({
               <span>Settings</span>
             </Link>
             
-            <div className="pt-3 mt-3 border-t border-hubspot-gray-200">
+            <div className="pt-3 mt-3 border-t border-buddha-gray-200">
               <a href="https://docs.buddhaforms.com" target="_blank" rel="noopener noreferrer" className="sidebar-link text-sm">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -287,12 +287,12 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header - always show, but with modified styling based on sidebar visibility */}
-        <header className="bg-white border-b border-hubspot-gray-200 h-16 flex items-center justify-between px-4 lg:px-6">
+        <header className="bg-white border-b border-buddha-gray-200 h-16 flex items-center justify-between px-4 lg:px-6">
           {shouldShowSidebar ? (
             /* Show sidebar toggle when sidebar is present */
             <button
               id="sidebar-toggle"
-              className="text-hubspot-gray-700 lg:hidden"
+              className="text-buddha-gray-700 lg:hidden"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <svg
@@ -312,17 +312,17 @@ export default function DashboardLayout({
           ) : (
             /* Show logo when sidebar is hidden */
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-hubspot-orange flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-buddha-orange flex items-center justify-center">
                 <span className="text-white font-bold">BF</span>
               </div>
-              <span className="text-lg font-semibold text-hubspot-blue-dark">BuddhaForms</span>
+              <span className="text-lg font-semibold text-buddha-blue-dark">BuddhaForms</span>
             </Link>
           )}
 
           <div className="flex items-center gap-3 ml-auto">
             <button 
               onClick={() => setIsCreateFormModalOpen(true)}
-              className="btn-hubspot flex items-center gap-1 text-sm"
+              className="btn-buddha flex items-center gap-1 text-sm"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -346,12 +346,12 @@ export default function DashboardLayout({
       {/* Create Form Modal */}
       {isCreateFormModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-hubspot-lg shadow-hubspot-lg max-w-md w-full mx-auto">
-            <div className="px-6 py-4 border-b border-hubspot-gray-200 flex justify-between items-center">
-              <h3 className="text-lg font-medium text-hubspot-blue-dark">Create New Form</h3>
+          <div className="bg-white rounded-buddha-lg shadow-buddha-lg max-w-md w-full mx-auto">
+            <div className="px-6 py-4 border-b border-buddha-gray-200 flex justify-between items-center">
+              <h3 className="text-lg font-medium text-buddha-blue-dark">Create New Form</h3>
               <button 
                 onClick={() => setIsCreateFormModalOpen(false)}
-                className="text-hubspot-gray-500 hover:text-hubspot-gray-700"
+                className="text-buddha-gray-500 hover:text-buddha-gray-700"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -361,7 +361,7 @@ export default function DashboardLayout({
             <form onSubmit={handleCreateForm} className="p-6">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="formName" className="block text-sm font-medium text-hubspot-gray-700 mb-1">
+                  <label htmlFor="formName" className="block text-sm font-medium text-buddha-gray-700 mb-1">
                     Form Name
                   </label>
                   <input
@@ -369,13 +369,13 @@ export default function DashboardLayout({
                     id="formName"
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="w-full px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+                    className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
                     placeholder="Contact Form"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="emailTo" className="block text-sm font-medium text-hubspot-gray-700 mb-1">
+                  <label htmlFor="emailTo" className="block text-sm font-medium text-buddha-gray-700 mb-1">
                     Send Notifications To
                   </label>
                   <input
@@ -383,11 +383,11 @@ export default function DashboardLayout({
                     id="emailTo"
                     value={emailTo}
                     onChange={(e) => setEmailTo(e.target.value)}
-                    className="w-full px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+                    className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
                     placeholder="email@example.com"
                     required
                   />
-                  <p className="mt-1 text-xs text-hubspot-gray-500">
+                  <p className="mt-1 text-xs text-buddha-gray-500">
                     Form submissions will be sent to this email address.
                   </p>
                 </div>
@@ -396,13 +396,13 @@ export default function DashboardLayout({
                 <button
                   type="button"
                   onClick={() => setIsCreateFormModalOpen(false)}
-                  className="btn-hubspot-secondary text-sm"
+                  className="btn-buddha-secondary text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-hubspot text-sm"
+                  className="btn-buddha text-sm"
                 >
                   Create Form
                 </button>

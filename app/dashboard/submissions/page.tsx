@@ -77,12 +77,12 @@ export default function SubmissionsPage() {
       />
       
       {sortedSubmissions.length === 0 ? (
-        <div className="card-hubspot text-center p-8">
-          <svg className="h-12 w-12 text-hubspot-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="card-buddha text-center p-8">
+          <svg className="h-12 w-12 text-buddha-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <h2 className="text-xl font-semibold text-hubspot-blue-dark mb-2">No submissions found</h2>
-          <p className="text-hubspot-gray-600 mb-6 text-sm">
+          <h2 className="text-xl font-semibold text-buddha-blue-dark mb-2">No submissions found</h2>
+          <p className="text-buddha-gray-600 mb-6 text-sm">
             {formIdFilter 
               ? `There are no submissions yet for ${formName}.`
               : 'Once your forms receive submissions, they will appear here.'
@@ -90,56 +90,56 @@ export default function SubmissionsPage() {
           </p>
         </div>
       ) : (
-        <div className="card-hubspot overflow-hidden p-0">
+        <div className="card-buddha overflow-hidden p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-hubspot-gray-200">
-              <thead className="bg-hubspot-gray-50">
+            <table className="min-w-full divide-y divide-buddha-gray-200">
+              <thead className="bg-buddha-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-hubspot-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Date
                   </th>
                   {!formIdFilter && (
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-hubspot-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                       Form
                     </th>
                   )}
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-hubspot-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Preview
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-hubspot-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-hubspot-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-buddha-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-hubspot-gray-200">
+              <tbody className="bg-white divide-y divide-buddha-gray-200">
                 {sortedSubmissions.map((submission) => (
-                  <tr key={submission.id} className={`hover:bg-hubspot-gray-50 ${!submission.read ? 'bg-hubspot-orange-50' : ''}`}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-hubspot-gray-600">
+                  <tr key={submission.id} className={`hover:bg-buddha-gray-50 ${!submission.read ? 'bg-buddha-orange-50' : ''}`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-buddha-gray-600">
                       {formatDate(submission.submittedAt)}
                     </td>
                     {!formIdFilter && (
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Link 
                           href={`/dashboard/forms/${submission.formId}`}
-                          className="text-hubspot-blue-dark hover:text-hubspot-orange font-medium text-sm"
+                          className="text-buddha-blue-dark hover:text-buddha-orange font-medium text-sm"
                         >
                           {submission.formName}
                         </Link>
                       </td>
                     )}
                     <td className="px-6 py-4">
-                      <div className="text-sm text-hubspot-gray-800 truncate max-w-xs">
+                      <div className="text-sm text-buddha-gray-800 truncate max-w-xs">
                         {getSubmissionPreview(submission.data)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         !submission.read 
-                          ? 'bg-hubspot-orange-light text-hubspot-orange-dark' 
-                          : 'bg-hubspot-gray-200 text-hubspot-gray-700'
+                          ? 'bg-buddha-orange-light text-buddha-orange-dark' 
+                          : 'bg-buddha-gray-200 text-buddha-gray-700'
                       }`}>
                         {!submission.read ? 'New' : 'Read'}
                       </span>
@@ -147,7 +147,7 @@ export default function SubmissionsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                       <Link 
                         href={`/dashboard/submissions/${submission.id}`}
-                        className="text-hubspot-orange hover:text-hubspot-orange-dark font-medium"
+                        className="text-buddha-orange hover:text-buddha-orange-dark font-medium"
                       >
                         View Details
                       </Link>

@@ -29,9 +29,9 @@ export default function PageHeader({
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <div>
-        <h1 className="text-2xl font-semibold text-hubspot-blue-dark">{title}</h1>
+        <h1 className="text-2xl font-semibold text-buddha-blue-dark">{title}</h1>
         {description && (
-          <p className="text-hubspot-gray-600 text-sm">{description}</p>
+          <p className="text-buddha-gray-600 text-sm">{description}</p>
         )}
         {children}
       </div>
@@ -50,8 +50,8 @@ export default function PageHeader({
             }
             
             const buttonClass = actionConfig.isPrimary 
-              ? "btn-hubspot text-sm flex items-center gap-1" 
-              : "btn-hubspot-secondary text-sm flex items-center gap-1";
+              ? "btn-buddha text-sm flex items-center gap-1" 
+              : "btn-buddha-secondary text-sm flex items-center gap-1";
               
             if (actionConfig.href) {
               return (

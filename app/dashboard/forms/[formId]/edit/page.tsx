@@ -21,10 +21,10 @@ export default function EditFormPage({
   
   if (!formData) {
     return (
-      <div className="card-hubspot text-center p-8">
-        <h1 className="text-xl font-semibold text-hubspot-blue-dark mb-4">Form Not Found</h1>
-        <p className="mb-6 text-hubspot-gray-600 text-sm">The form you're looking for doesn't exist or has been deleted.</p>
-        <Link href="/dashboard/forms" className="btn-hubspot text-sm">
+      <div className="card-buddha text-center p-8">
+        <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Form Not Found</h1>
+        <p className="mb-6 text-buddha-gray-600 text-sm">The form you're looking for doesn't exist or has been deleted.</p>
+        <Link href="/dashboard/forms" className="btn-buddha text-sm">
           Return to Forms
         </Link>
       </div>
@@ -129,7 +129,7 @@ export default function EditFormPage({
 
       {/* Success message */}
       {saveSuccess && (
-        <div className="bg-green-50 border border-green-200 rounded-hubspot p-4 mb-6">
+        <div className="bg-green-50 border border-green-200 rounded-buddha p-4 mb-6">
           <div className="flex">
             <svg className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -145,12 +145,12 @@ export default function EditFormPage({
 
       {/* Form settings */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="card-hubspot">
-          <h2 className="text-lg font-medium text-hubspot-blue-dark mb-6">Form Settings</h2>
+        <div className="card-buddha">
+          <h2 className="text-lg font-medium text-buddha-blue-dark mb-6">Form Settings</h2>
           
           {/* Form Name */}
           <div className="mb-6">
-            <label htmlFor="formName" className="block text-sm font-medium text-hubspot-gray-700 mb-1">
+            <label htmlFor="formName" className="block text-sm font-medium text-buddha-gray-700 mb-1">
               Form Name
             </label>
             <input
@@ -158,17 +158,17 @@ export default function EditFormPage({
               id="formName"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+              className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
               placeholder="Enter form name"
               required
             />
-            <p className="mt-1 text-xs text-hubspot-gray-500">
+            <p className="mt-1 text-xs text-buddha-gray-500">
               This name is only visible to you in your dashboard.
             </p>
           </div>
           
           {/* Toggle for Form Activation */}
-          <div className="flex py-4 border-b border-hubspot-gray-200">
+          <div className="flex py-4 border-b border-buddha-gray-200">
             <Toggle
               id="formStatus"
               checked={active}
@@ -179,7 +179,7 @@ export default function EditFormPage({
           </div>
           
           {/* Toggle for Spam Protection */}
-          <div className="py-4 border-t border-hubspot-gray-200">
+          <div className="py-4 border-t border-buddha-gray-200">
             <Toggle
               id="spamProtection"
               checked={spamProtection}
@@ -190,7 +190,7 @@ export default function EditFormPage({
           </div>
           
           {/* Email Notification Settings */}
-          <div className="py-4 border-t border-hubspot-gray-200">
+          <div className="py-4 border-t border-buddha-gray-200">
             <div className="mb-4">
               <Toggle
                 id="emailNotifications"
@@ -203,7 +203,7 @@ export default function EditFormPage({
             
             {emailNotifications && (
               <div className="mt-2">
-                <label htmlFor="notificationEmail" className="block text-sm font-medium text-hubspot-gray-700 mb-1">
+                <label htmlFor="notificationEmail" className="block text-sm font-medium text-buddha-gray-700 mb-1">
                   Send Notifications To
                 </label>
                 <input
@@ -211,11 +211,11 @@ export default function EditFormPage({
                   id="notificationEmail"
                   value={notificationEmail}
                   onChange={(e) => setNotificationEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+                  className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
                   placeholder="your@email.com"
                   required={emailNotifications}
                 />
-                <p className="mt-1 text-xs text-hubspot-gray-500">
+                <p className="mt-1 text-xs text-buddha-gray-500">
                   You'll receive an email notification at this address for each new submission.
                 </p>
               </div>
@@ -223,11 +223,11 @@ export default function EditFormPage({
           </div>
           
           {/* Data Retention Dropdown */}
-          <div className="py-4 border-t border-hubspot-gray-200">
+          <div className="py-4 border-t border-buddha-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-medium text-hubspot-blue-dark">Data Retention</h3>
-                <p className="text-xs text-hubspot-gray-500 mt-1">
+                <h3 className="text-sm font-medium text-buddha-blue-dark">Data Retention</h3>
+                <p className="text-xs text-buddha-gray-500 mt-1">
                   Choose how long submission data should be kept before automatic deletion.
                 </p>
               </div>
@@ -235,7 +235,7 @@ export default function EditFormPage({
                 id="dataRetention"
                 value={dataRetention}
                 onChange={(e) => setDataRetention(e.target.value)}
-                className="px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+                className="px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
               >
                 <option value="forever">Forever</option>
                 <option value="30days">30 days</option>
@@ -244,14 +244,14 @@ export default function EditFormPage({
                 <option value="3years">3 years</option>
               </select>
             </div>
-            <p className="mt-3 text-xs text-hubspot-gray-500">
+            <p className="mt-3 text-xs text-buddha-gray-500">
               Current setting: Submissions will be kept <span className="font-medium">{getDataRetentionText(dataRetention)}</span>
             </p>
           </div>
         </div>
         
         {/* Danger Zone */}
-        <div className="card-hubspot bg-red-50 border-red-100">
+        <div className="card-buddha bg-red-50 border-red-100">
           <h2 className="text-lg font-medium text-red-700 mb-4">Danger Zone</h2>
           <p className="text-sm text-red-600 mb-4">
             Deleting a form is permanent and will also delete all of its submissions. This action cannot be undone.
@@ -269,12 +269,12 @@ export default function EditFormPage({
       {/* Delete Confirmation Modal */}
       {deleteConfirmOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-hubspot-lg shadow-hubspot-lg max-w-md w-full mx-auto">
-            <div className="px-6 py-4 border-b border-hubspot-gray-200 flex justify-between items-center">
+          <div className="bg-white rounded-buddha-lg shadow-buddha-lg max-w-md w-full mx-auto">
+            <div className="px-6 py-4 border-b border-buddha-gray-200 flex justify-between items-center">
               <h3 className="text-lg font-medium text-red-600">Delete Form</h3>
               <button 
                 onClick={() => setDeleteConfirmOpen(false)}
-                className="text-hubspot-gray-500 hover:text-hubspot-gray-700"
+                className="text-buddha-gray-500 hover:text-buddha-gray-700"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -282,7 +282,7 @@ export default function EditFormPage({
               </button>
             </div>
             <div className="p-6">
-              <div className="rounded-hubspot bg-red-50 p-4 mb-4">
+              <div className="rounded-buddha bg-red-50 p-4 mb-4">
                 <div className="flex">
                   <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -304,11 +304,11 @@ export default function EditFormPage({
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="text-hubspot-orange focus:ring-hubspot-orange h-4 w-4 border-hubspot-gray-300 rounded"
+                    className="text-buddha-orange focus:ring-buddha-orange h-4 w-4 border-buddha-gray-300 rounded"
                     checked={deleteChecked}
                     onChange={(e) => setDeleteChecked(e.target.checked)}
                   />
-                  <span className="ml-2 text-sm text-hubspot-gray-700">
+                  <span className="ml-2 text-sm text-buddha-gray-700">
                     I understand that this action is permanent and cannot be undone
                   </span>
                 </label>
@@ -318,7 +318,7 @@ export default function EditFormPage({
                 <button
                   type="button"
                   onClick={() => setDeleteConfirmOpen(false)}
-                  className="btn-hubspot-secondary text-sm"
+                  className="btn-buddha-secondary text-sm"
                 >
                   Cancel
                 </button>
@@ -326,7 +326,7 @@ export default function EditFormPage({
                   type="button"
                   onClick={handleDeleteForm}
                   disabled={!deleteChecked}
-                  className={`px-4 py-2 rounded-hubspot text-white text-sm font-medium ${deleteChecked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-300 cursor-not-allowed'}`}
+                  className={`px-4 py-2 rounded-buddha text-white text-sm font-medium ${deleteChecked ? 'bg-red-600 hover:bg-red-700' : 'bg-red-300 cursor-not-allowed'}`}
                 >
                   Delete Form
                 </button>

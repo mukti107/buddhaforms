@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // HubSpot-inspired color palette
-        hubspot: {
+        // Buddha-inspired color palette
+        buddha: {
           orange: '#FF7A59',
           'orange-dark': '#F15B2A',
           'orange-light': '#FFBDAD',
@@ -69,14 +69,14 @@ module.exports = {
         lexend: ['Lexend', 'sans-serif'],
       },
       boxShadow: {
-        'hubspot': '0 2px 4px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
-        'hubspot-md': '0 5px 10px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
-        'hubspot-lg': '0 10px 20px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'buddha': '0 2px 4px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'buddha-md': '0 5px 10px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'buddha-lg': '0 10px 20px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
       },
       borderRadius: {
-        'hubspot': '3px',
-        'hubspot-md': '5px',
-        'hubspot-lg': '8px',
+        'buddha': '3px',
+        'buddha-md': '5px',
+        'buddha-lg': '8px',
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

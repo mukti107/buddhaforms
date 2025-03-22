@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactNode } from 'react';
 
 interface PageHeaderProps {
@@ -8,11 +10,11 @@ interface PageHeaderProps {
 
 export function PageHeader({ heading, subheading, children }: PageHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-5 mb-5 border-b border-hubspot-gray-200">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-5 mb-5 border-b border-buddha-gray-200">
       <div>
-        <h1 className="text-2xl font-semibold text-hubspot-blue-dark">{heading}</h1>
+        <h1 className="text-2xl font-semibold text-buddha-blue-dark">{heading}</h1>
         {subheading && (
-          <p className="mt-1 text-hubspot-gray-600">{subheading}</p>
+          <p className="mt-1 text-buddha-gray-600">{subheading}</p>
         )}
       </div>
       {children && (

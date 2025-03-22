@@ -1,16 +1,18 @@
 "use client";  // Add this directive at the top
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, mockForms, getSubmissionsByForm } from '../../lib/mockData';
 import PageHeader from '@/app/components/PageHeader';
+import { ConfettiButton, fireConfettiFireworks, ConfettiRef, Confetti } from '@/app/components/ui/confetti';
 
 export default function FormsPage() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formName, setFormName] = useState('');
   const [emailTo, setEmailTo] = useState('');
+  const confettiRef = useRef<ConfettiRef>(null);
   
   // Use mock data from our mockData file
   const forms = mockForms.map(form => ({
@@ -54,31 +56,37 @@ export default function FormsPage() {
     setFormName('');
     setEmailTo('');
     setIsModalOpen(false);
-    
-    // In a real app, you might refresh data or navigate to the new form
-    alert(`Form "${formName}" created successfully!`);
+
+    // Wait for the modal to close before showing confetti
+    setTimeout(() => {
+      // Show a fireworks confetti effect
+      fireConfettiFireworks();
+      
+      // Show success message
+      alert(`Form "${formName}" created successfully!`);
+    }, 100);
   };
 
-  // Define icon for create form button
+  // Define icon for create form button (used in modal)
   const createFormIcon = (
     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
     </svg>
   );
+  
+  // Create Form action with confetti
+  const handleCreateFormClick = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="space-y-6">
+      {/* Add confetti component with manual start */}
+      <Confetti ref={confettiRef} manualStart={true} />
+
       <PageHeader
         title="My Forms"
         description="Manage all your forms and their submissions"
-        actions={[
-          {
-            label: "Create Form",
-            onClick: () => setIsModalOpen(true),
-            isPrimary: true,
-            icon: createFormIcon
-          }
-        ]}
       />
       
       {forms.length === 0 ? (
@@ -88,14 +96,8 @@ export default function FormsPage() {
           </svg>
           <h2 className="text-xl font-semibold text-hubspot-blue-dark mb-2">No forms created yet</h2>
           <p className="text-hubspot-gray-600 mb-6 text-sm">
-            Create your first form to start collecting submissions from your website.
+            Create your first form using the "Create Form" button in the header to get started.
           </p>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="btn-hubspot text-sm"
-          >
-            Create Your First Form
-          </button>
         </div>
       ) : (
         <div className="card-hubspot overflow-hidden p-0">

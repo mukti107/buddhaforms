@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { mockForms } from '@/app/lib/mockData';
+import PageHeader from '@/app/components/PageHeader';
 
 export default function EditFormPage({
   params
@@ -34,6 +35,8 @@ export default function EditFormPage({
   const [active, setActive] = useState(formData.active);
   const [spamProtection, setSpamProtection] = useState(formData.settings?.honeypot || false);
   const [dataRetention, setDataRetention] = useState('forever'); // Default since it's not in mockForms
+  const [emailNotifications, setEmailNotifications] = useState(formData.settings?.emailNotifications !== undefined ? formData.settings.emailNotifications : true);
+  const [notificationEmail, setNotificationEmail] = useState(formData.settings?.notificationEmail || '');
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteChecked, setDeleteChecked] = useState(false);
@@ -63,7 +66,9 @@ export default function EditFormPage({
       name, 
       active, 
       spamProtection, 
-      dataRetention
+      dataRetention,
+      emailNotifications,
+      notificationEmail
     });
     
     // Simulate API call
@@ -91,45 +96,35 @@ export default function EditFormPage({
     }, 800);
   };
 
+  // Define the save action with loading state
+  const saveIcon = (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  );
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-hubspot-blue-dark">Edit Form</h1>
-          <p className="text-hubspot-gray-600 text-sm">Configure your form settings</p>
-        </div>
-        <div className="flex gap-3">
-          <Link 
-            href={`/dashboard/forms/${formId}`}
-            className="btn-hubspot-secondary text-sm"
-          >
-            Cancel
-          </Link>
-          <button 
-            onClick={handleSubmit}
-            className="btn-hubspot text-sm flex items-center gap-1"
-            disabled={saving}
-          >
-            {saving ? (
-              <>
-                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Save Changes</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+      {/* Header - Using PageHeader component */}
+      <PageHeader
+        title="Edit Form"
+        description="Configure your form settings"
+        actions={[
+          {
+            label: "Cancel",
+            href: `/dashboard/forms/${formId}`,
+            isPrimary: false
+          },
+          {
+            label: saving ? "Saving..." : "Save Changes",
+            onClick: handleSubmit,
+            isPrimary: true,
+            isLoading: saving,
+            disabled: saving,
+            icon: !saving ? saveIcon : undefined
+          }
+        ]}
+      />
 
       {/* Success message */}
       {saveSuccess && (
@@ -223,6 +218,55 @@ export default function EditFormPage({
                 ></span>
               </label>
             </div>
+          </div>
+          
+          {/* Email Notification Settings */}
+          <div className="py-4 border-t border-hubspot-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-sm font-medium text-hubspot-blue-dark">Email Notifications</h3>
+                <p className="text-xs text-hubspot-gray-500 mt-1">
+                  Get notified by email when you receive a new submission.
+                </p>
+              </div>
+              <div className="relative inline-block w-12 h-6 transition duration-200 ease-in-out">
+                <input 
+                  type="checkbox"
+                  id="emailNotifications"
+                  className="opacity-0 w-0 h-0"
+                  checked={emailNotifications}
+                  onChange={(e) => setEmailNotifications(e.target.checked)}
+                />
+                <label 
+                  htmlFor="emailNotifications"
+                  className={`absolute top-0 left-0 right-0 bottom-0 rounded-full cursor-pointer transition-colors duration-200 ${emailNotifications ? 'bg-hubspot-green' : 'bg-hubspot-gray-300'}`}
+                >
+                  <span 
+                    className={`absolute left-1 bottom-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ${emailNotifications ? 'transform translate-x-6' : ''}`}
+                  ></span>
+                </label>
+              </div>
+            </div>
+            
+            {emailNotifications && (
+              <div className="mt-2">
+                <label htmlFor="notificationEmail" className="block text-sm font-medium text-hubspot-gray-700 mb-1">
+                  Send Notifications To
+                </label>
+                <input
+                  type="email"
+                  id="notificationEmail"
+                  value={notificationEmail}
+                  onChange={(e) => setNotificationEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-hubspot-gray-300 rounded-hubspot text-hubspot-gray-700 focus:outline-none focus:ring-2 focus:ring-hubspot-orange focus:border-transparent"
+                  placeholder="your@email.com"
+                  required={emailNotifications}
+                />
+                <p className="mt-1 text-xs text-hubspot-gray-500">
+                  You'll receive an email notification at this address for each new submission.
+                </p>
+              </div>
+            )}
           </div>
           
           {/* Data Retention Dropdown */}

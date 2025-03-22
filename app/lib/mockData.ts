@@ -34,6 +34,7 @@ export interface FormField {
 export interface FormSettings {
   redirectUrl?: string;
   emailNotifications?: boolean;
+  notificationEmail?: string;
   honeypot?: boolean;
   captcha?: boolean;
 }
@@ -50,7 +51,13 @@ export const mockForms: Form[] = [
       { id: 'name', type: 'text', label: 'Name', required: true },
       { id: 'email', type: 'email', label: 'Email', required: true },
       { id: 'message', type: 'textarea', label: 'Message', required: true }
-    ]
+    ],
+    settings: {
+      emailNotifications: true,
+      notificationEmail: 'contact@example.com',
+      honeypot: true,
+      captcha: false
+    }
   },
   { 
     id: 'form2', 

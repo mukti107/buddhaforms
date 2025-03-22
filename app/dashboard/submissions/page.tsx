@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { mockForms, mockSubmissions } from '@/app/lib/mockData';
+import PageHeader from '@/app/components/PageHeader';
 
 export default function SubmissionsPage() {
   const router = useRouter();
@@ -60,24 +61,20 @@ export default function SubmissionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-hubspot-blue-dark">
-            {formIdFilter ? `${formName} Submissions` : 'All Submissions'}
-          </h1>
-          <p className="text-hubspot-gray-600 mt-1 text-sm">
-            {formIdFilter 
-              ? `Viewing submissions for ${formName}`
-              : 'View and manage all form submissions across your account'
-            }
-          </p>
-        </div>
-        {formIdFilter && (
-          <Link href="/dashboard/submissions" className="btn-hubspot-secondary text-sm">
-            View All Submissions
-          </Link>
-        )}
-      </div>
+      <PageHeader
+        title={formIdFilter ? `${formName} Submissions` : 'All Submissions'}
+        description={formIdFilter 
+          ? `Viewing submissions for ${formName}`
+          : 'View and manage all form submissions across your account'
+        }
+        actions={formIdFilter ? [
+          {
+            label: "View All Submissions",
+            href: "/dashboard/submissions",
+            isPrimary: false
+          }
+        ] : []}
+      />
       
       {sortedSubmissions.length === 0 ? (
         <div className="card-hubspot text-center p-8">

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, mockForms, getSubmissionsByForm } from '../../lib/mockData';
+import PageHeader from '@/app/components/PageHeader';
 
 export default function FormsPage() {
   const router = useRouter();
@@ -58,16 +59,27 @@ export default function FormsPage() {
     alert(`Form "${formName}" created successfully!`);
   };
 
+  // Define icon for create form button
+  const createFormIcon = (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+    </svg>
+  );
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-hubspot-blue-dark">My Forms</h1>
-          <p className="text-hubspot-gray-600 mt-1 text-sm">
-            Manage all your forms and their submissions
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="My Forms"
+        description="Manage all your forms and their submissions"
+        actions={[
+          {
+            label: "Create Form",
+            onClick: () => setIsModalOpen(true),
+            isPrimary: true,
+            icon: createFormIcon
+          }
+        ]}
+      />
       
       {forms.length === 0 ? (
         <div className="card-hubspot text-center p-8">

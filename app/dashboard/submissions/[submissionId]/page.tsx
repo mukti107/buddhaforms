@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { mockSubmissions } from '@/app/lib/mockData';
+import PageHeader from '@/app/components/PageHeader';
 
 export default function SubmissionDetailPage({
   params
@@ -40,32 +41,40 @@ export default function SubmissionDetailPage({
     }).format(date);
   };
 
+  // Define icons for buttons
+  const viewFormIcon = (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  );
+  
+  const markAsReadIcon = (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  );
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-hubspot-blue-dark">Submission Details</h1>
-          <p className="text-hubspot-gray-600 text-sm">Received on {formatDate(submission.submittedAt)}</p>
-        </div>
-        <div className="flex gap-3">
-          <Link 
-            href={`/dashboard/forms/${submission.formId}`} 
-            className="btn-hubspot-secondary text-sm flex items-center gap-1"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-            <span>View Form</span>
-          </Link>
-          <button className="btn-hubspot-secondary text-sm flex items-center gap-1">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span>Mark as Read</span>
-          </button>
-        </div>
-      </div>
+      {/* Header - Using PageHeader component */}
+      <PageHeader
+        title="Submission Details"
+        description={`Received on ${formatDate(submission.submittedAt)}`}
+        actions={[
+          {
+            label: "View Form",
+            href: `/dashboard/forms/${submission.formId}`,
+            isPrimary: false,
+            icon: viewFormIcon
+          },
+          {
+            label: "Mark as Read",
+            onClick: () => console.log('Mark as read:', submissionId),
+            isPrimary: false,
+            icon: markAsReadIcon
+          }
+        ]}
+      />
 
       {/* Content */}
       <div className="grid grid-cols-1 gap-6">

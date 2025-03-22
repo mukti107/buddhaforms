@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { mockForms, mockSubmissions, getSubmissionsByForm } from '@/app/lib/mockData';
+import PageHeader from '@/app/components/PageHeader';
 
 export default function FormDetailPage({
   params
@@ -47,29 +48,33 @@ export default function FormDetailPage({
     }).format(date);
   };
 
+  // Define the icons for the actions
+  const editIcon = (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+    </svg>
+  );
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-hubspot-blue-dark">{form.name}</h1>
-          <p className="text-hubspot-gray-600 text-sm">Created on {formatDate(form.createdAt || new Date())}</p>
-        </div>
-        <div className="flex gap-3">
-          <Link 
-            href={`/dashboard/forms/${formId}/edit`}
-            className="btn-hubspot-secondary flex items-center gap-1 text-sm"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            <span>Edit Form</span>
-          </Link>
-          <Link href={`/dashboard/forms/${formId}/submissions`} className="btn-hubspot text-sm">
-            View All Submissions
-          </Link>
-        </div>
-      </div>
+      {/* Header - Using PageHeader component */}
+      <PageHeader
+        title={form.name}
+        description={`Created on ${formatDate(form.createdAt || new Date())}`}
+        actions={[
+          {
+            label: "Edit Form",
+            href: `/dashboard/forms/${formId}/edit`,
+            isPrimary: false,
+            icon: editIcon
+          },
+          {
+            label: "View All Submissions",
+            href: `/dashboard/submissions?formId=${formId}`,
+            isPrimary: true
+          }
+        ]}
+      />
 
       {/* Content grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

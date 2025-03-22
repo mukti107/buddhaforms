@@ -45,16 +45,18 @@ export async function POST(
       data,
     });
 
-    // Send email notification
-    await sendEmail(
-      form.emailTo,
-      `New submission for ${form.name}`,
-      `
-        <h1>New Form Submission</h1>
-        <p>You have received a new submission for form: ${form.name}</p>
-        <pre>${JSON.stringify(data, null, 2)}</pre>
-      `
-    );
+    // Send email notification if enabled and email is set
+    if (form.settings?.emailNotifications && form.settings?.notificationEmail) {
+      await sendEmail(
+        form.settings.notificationEmail,
+        `New submission for ${form.name}`,
+        `
+          <h1>New Form Submission</h1>
+          <p>You have received a new submission for form: ${form.name}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

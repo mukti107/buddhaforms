@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { mockForms } from '@/app/lib/mockData';
 
 export default function EditFormPage({
   params
@@ -13,38 +14,8 @@ export default function EditFormPage({
   // Use React.use() to unwrap the Promise-based params
   const { formId } = React.use(params);
   
-  // Mock data for forms
-  const mockForms = [
-    {
-      formId: 'form1',
-      name: 'Contact Form',
-      emailTo: 'contact@example.com',
-      createdAt: '2023-05-15T10:30:00Z',
-      active: true,
-      spamProtection: true,
-      dataRetention: 'forever',
-    },
-    {
-      formId: 'form2',
-      name: 'Feedback Survey',
-      emailTo: 'feedback@example.com',
-      createdAt: '2023-06-20T14:45:00Z',
-      active: true,
-      spamProtection: false,
-      dataRetention: '90days',
-    },
-    {
-      formId: 'form3',
-      name: 'Event Registration',
-      emailTo: 'events@example.com',
-      createdAt: '2023-07-10T09:15:00Z',
-      active: false,
-      spamProtection: true,
-      dataRetention: '1year',
-    },
-  ];
-  
-  const formData = mockForms.find(f => f.formId === formId);
+  // Find form from centralized mock data
+  const formData = mockForms.find(f => f.id === formId);
   
   if (!formData) {
     return (
@@ -61,8 +32,8 @@ export default function EditFormPage({
   // State for form fields
   const [name, setName] = useState(formData.name);
   const [active, setActive] = useState(formData.active);
-  const [spamProtection, setSpamProtection] = useState(formData.spamProtection);
-  const [dataRetention, setDataRetention] = useState(formData.dataRetention);
+  const [spamProtection, setSpamProtection] = useState(formData.settings?.honeypot || false);
+  const [dataRetention, setDataRetention] = useState('forever'); // Default since it's not in mockForms
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteChecked, setDeleteChecked] = useState(false);

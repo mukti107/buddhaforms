@@ -3,87 +3,12 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { mockForms, mockSubmissions } from '@/app/lib/mockData';
 
 export default function SubmissionsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const formIdFilter = searchParams.get('formId');
-  
-  // Mock data for forms
-  const mockForms = [
-    {
-      id: 'form1',
-      name: 'Contact Form',
-    },
-    {
-      id: 'form2',
-      name: 'Feedback Survey',
-    },
-    {
-      id: 'form3',
-      name: 'Event Registration',
-    },
-  ];
-
-  // Mock data for submissions
-  const mockSubmissions = [
-    {
-      id: 'sub1',
-      formId: 'form1',
-      formName: 'Contact Form',
-      data: { name: 'John Doe', email: 'john@example.com', message: 'I need help with my order' },
-      createdAt: '2023-08-01T11:20:00Z',
-      read: false,
-    },
-    {
-      id: 'sub2',
-      formId: 'form1',
-      formName: 'Contact Form',
-      data: { name: 'Jane Smith', email: 'jane@example.com', message: 'Your product is amazing!' },
-      createdAt: '2023-08-02T09:15:00Z',
-      read: true,
-    },
-    {
-      id: 'sub3',
-      formId: 'form1',
-      formName: 'Contact Form',
-      data: { name: 'Mike Johnson', email: 'mike@example.com', message: 'Need technical support' },
-      createdAt: '2023-08-03T15:45:00Z',
-      read: false,
-    },
-    {
-      id: 'sub4',
-      formId: 'form2',
-      formName: 'Feedback Survey',
-      data: { rating: '5', feedback: 'Great experience', suggestions: 'None at the moment' },
-      createdAt: '2023-08-01T10:30:00Z',
-      read: true,
-    },
-    {
-      id: 'sub5',
-      formId: 'form3',
-      formName: 'Event Registration',
-      data: { attendee: 'Sarah Wilson', email: 'sarah@example.com', guests: ['Tom', 'Lisa'] },
-      createdAt: '2023-08-01T14:20:00Z',
-      read: false,
-    },
-    {
-      id: 'sub6',
-      formId: 'form1',
-      formName: 'Contact Form',
-      data: { name: 'Robert Brown', email: 'robert@example.com', message: 'Question about pricing' },
-      createdAt: '2023-08-04T16:30:00Z',
-      read: false,
-    },
-    {
-      id: 'sub7',
-      formId: 'form1',
-      formName: 'Contact Form',
-      data: { name: 'Emma Davis', email: 'emma@example.com', message: 'Feature request' },
-      createdAt: '2023-08-05T13:45:00Z',
-      read: true,
-    },
-  ];
   
   // Filter submissions if a formId is provided
   const filteredSubmissions = formIdFilter 
@@ -92,7 +17,7 @@ export default function SubmissionsPage() {
     
   // Sort by newest first
   const sortedSubmissions = [...filteredSubmissions].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => b.submittedAt.getTime() - a.submittedAt.getTime()
   );
 
   // Get form name if filtering by form
@@ -101,8 +26,7 @@ export default function SubmissionsPage() {
     : null;
 
   // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -197,7 +121,7 @@ export default function SubmissionsPage() {
                 {sortedSubmissions.map((submission) => (
                   <tr key={submission.id} className={`hover:bg-hubspot-gray-50 ${!submission.read ? 'bg-hubspot-orange-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-hubspot-gray-600">
-                      {formatDate(submission.createdAt)}
+                      {formatDate(submission.submittedAt)}
                     </td>
                     {!formIdFilter && (
                       <td className="px-6 py-4 whitespace-nowrap">

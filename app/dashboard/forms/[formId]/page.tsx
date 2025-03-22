@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { mockForms, mockSubmissions, getSubmissionsByForm } from '@/app/lib/mockData';
 
 export default function FormDetailPage({
   params
@@ -13,78 +14,8 @@ export default function FormDetailPage({
   // Use React.use() to unwrap the Promise-based params
   const { formId } = React.use(params);
   
-  // Mock data for forms
-  const mockForms = [
-    {
-      formId: 'form1',
-      name: 'Contact Form',
-      emailTo: 'contact@example.com',
-      createdAt: '2023-05-15T10:30:00Z',
-      active: true,
-    },
-    {
-      formId: 'form2',
-      name: 'Feedback Survey',
-      emailTo: 'feedback@example.com',
-      createdAt: '2023-06-20T14:45:00Z',
-      active: true,
-    },
-    {
-      formId: 'form3',
-      name: 'Event Registration',
-      emailTo: 'events@example.com',
-      createdAt: '2023-07-10T09:15:00Z',
-      active: false,
-    },
-  ];
-
-  // Mock data for submissions
-  const mockSubmissions = [
-    {
-      id: 'sub1',
-      formId: 'form1',
-      data: { name: 'John Doe', email: 'john@example.com', message: 'I need help with my order' },
-      createdAt: '2023-08-01T11:20:00Z',
-    },
-    {
-      id: 'sub2',
-      formId: 'form1',
-      data: { name: 'Jane Smith', email: 'jane@example.com', message: 'Your product is amazing!' },
-      createdAt: '2023-08-02T09:15:00Z',
-    },
-    {
-      id: 'sub3',
-      formId: 'form1',
-      data: { name: 'Mike Johnson', email: 'mike@example.com', message: 'Need technical support' },
-      createdAt: '2023-08-03T15:45:00Z',
-    },
-    {
-      id: 'sub4',
-      formId: 'form2',
-      data: { rating: '5', feedback: 'Great experience', suggestions: 'None at the moment' },
-      createdAt: '2023-08-01T10:30:00Z',
-    },
-    {
-      id: 'sub5',
-      formId: 'form3',
-      data: { attendee: 'Sarah Wilson', email: 'sarah@example.com', guests: ['Tom', 'Lisa'] },
-      createdAt: '2023-08-01T14:20:00Z',
-    },
-    {
-      id: 'sub6',
-      formId: 'form1',
-      data: { name: 'Robert Brown', email: 'robert@example.com', message: 'Question about pricing' },
-      createdAt: '2023-08-04T16:30:00Z',
-    },
-    {
-      id: 'sub7',
-      formId: 'form1',
-      data: { name: 'Emma Davis', email: 'emma@example.com', message: 'Feature request' },
-      createdAt: '2023-08-05T13:45:00Z',
-    },
-  ];
-  
-  const form = mockForms.find(f => f.formId === formId);
+  // Find the form in our centralized mock data
+  const form = mockForms.find(f => f.id === formId);
   
   if (!form) {
     return (
@@ -99,14 +30,13 @@ export default function FormDetailPage({
   }
   
   // Get recent submissions for this form
-  const recentSubmissions = mockSubmissions
-    .filter(sub => sub.formId === formId)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  const formSubmissions = getSubmissionsByForm(formId);
+  const recentSubmissions = [...formSubmissions]
+    .sort((a, b) => b.submittedAt.getTime() - a.submittedAt.getTime())
     .slice(0, 5);
 
   // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -123,7 +53,7 @@ export default function FormDetailPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-hubspot-blue-dark">{form.name}</h1>
-          <p className="text-hubspot-gray-600 text-sm">Created on {formatDate(form.createdAt)}</p>
+          <p className="text-hubspot-gray-600 text-sm">Created on {formatDate(form.createdAt || new Date())}</p>
         </div>
         <div className="flex gap-3">
           <Link 
@@ -150,12 +80,14 @@ export default function FormDetailPage({
             <div className="flex flex-col">
               <span className="text-hubspot-gray-600 text-xs">Total Submissions</span>
               <span className="text-xl font-semibold text-hubspot-blue-dark">
-                {recentSubmissions.length}
+                {form.submissionCount || recentSubmissions.length}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-hubspot-gray-600 text-xs">Notifications Sent To</span>
-              <span className="text-hubspot-blue-dark font-medium text-sm">{form.emailTo}</span>
+              <span className="text-hubspot-blue-dark font-medium text-sm">
+                {form.settings?.emailNotifications ? 'Enabled' : 'Disabled'}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="text-hubspot-gray-600 text-xs">Form Status</span>
@@ -221,7 +153,7 @@ export default function FormDetailPage({
                   {recentSubmissions.map((submission) => (
                     <tr key={submission.id} className="hover:bg-hubspot-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-hubspot-gray-600">
-                        {formatDate(submission.createdAt)}
+                        {formatDate(submission.submittedAt)}
                       </td>
                       <td className="px-6 py-4 text-sm text-hubspot-gray-800">
                         <div className="max-w-md overflow-hidden">

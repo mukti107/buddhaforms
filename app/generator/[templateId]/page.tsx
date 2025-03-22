@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { use } from 'react';
 
 // Import form templates from parent page
 const formTemplates = [
@@ -221,9 +222,13 @@ export default function TemplateDetailPage({ params }: { params: { templateId: s
   const [htmlCode, setHtmlCode] = useState<string>('');
   const [copied, setCopied] = useState(false);
   
+  // Unwrap params with React.use
+  const unwrappedParams = use(params as unknown as Promise<{ templateId: string }>);
+  const templateId = unwrappedParams.templateId;
+  
   useEffect(() => {
     // Find the template from the template ID
-    const selectedTemplate = formTemplates.find(t => t.id === params.templateId);
+    const selectedTemplate = formTemplates.find(t => t.id === templateId);
     
     if (!selectedTemplate) {
       // Redirect to the main generator page if template not found
@@ -235,7 +240,7 @@ export default function TemplateDetailPage({ params }: { params: { templateId: s
     
     // Generate HTML code for the template
     generateHtmlCode(selectedTemplate);
-  }, [params.templateId, router]);
+  }, [templateId, router]);
   
   const generateHtmlCode = (template: any) => {
     if (!template || !template.fields) return;

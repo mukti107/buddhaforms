@@ -219,7 +219,7 @@ export default function EditFormPage() {
           </div>
           
           {/* Toggle for Form Activation */}
-          <div className="py-4 border-b border-buddha-gray-200">
+          <div className="py-4">
             <Toggle
               id="formStatus"
               checked={active}
@@ -230,7 +230,7 @@ export default function EditFormPage() {
           </div>
           
           {/* Toggle for Spam Protection */}
-          <div className="py-4 border-t border-buddha-gray-200">
+          <div className="py-4">
             <Toggle
               id="spamProtection"
               checked={spamProtection}
@@ -241,7 +241,7 @@ export default function EditFormPage() {
           </div>
           
           {/* Email Notification Settings */}
-          <div className="py-4 border-t border-buddha-gray-200">
+          <div className="py-4">
             <div className="mb-4">
               <Toggle
                 id="emailNotifications"
@@ -274,29 +274,24 @@ export default function EditFormPage() {
           </div>
           
           {/* Data Retention Dropdown */}
-          <div className="py-4 border-t border-buddha-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-buddha-blue-dark">Data Retention</h3>
-                <p className="text-xs text-buddha-gray-500 mt-1">
-                  Choose how long submission data should be kept before automatic deletion.
-                </p>
-              </div>
-              <select
-                id="dataRetention"
-                value={dataRetention}
-                onChange={(e) => setDataRetention(e.target.value)}
-                className="px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
-              >
-                <option value="forever">Forever</option>
-                <option value="30days">30 days</option>
-                <option value="90days">90 days</option>
-                <option value="1year">1 year</option>
-                <option value="3years">3 years</option>
-              </select>
-            </div>
-            <p className="mt-3 text-xs text-buddha-gray-500">
-              Current setting: Submissions will be kept <span className="font-medium">{getDataRetentionText(dataRetention)}</span>
+          <div className="py-4">
+            <label htmlFor="dataRetention" className="block text-sm font-medium text-buddha-gray-700 mb-1">
+              Data Retention
+            </label>
+            <select
+              id="dataRetention"
+              value={dataRetention}
+              onChange={(e) => setDataRetention(e.target.value)}
+              className="w-full px-3 py-2 border border-buddha-gray-300 rounded-buddha text-buddha-gray-700 focus:outline-none focus:ring-2 focus:ring-buddha-orange focus:border-transparent"
+            >
+              <option value="forever">Forever</option>
+              <option value="30days">30 days</option>
+              <option value="90days">90 days</option>
+              <option value="1year">1 year</option>
+              <option value="3years">3 years</option>
+            </select>
+            <p className="mt-1 text-xs text-buddha-gray-500">
+              Choose how long to keep form submissions. After this period, old submissions will be automatically deleted.
             </p>
           </div>
         </div>

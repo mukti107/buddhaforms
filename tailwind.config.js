@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Buddha-inspired color palette
-        buddha: {
+        // Parrot-inspired color palette
+        parrot: {
           orange: '#FF7A59',
           'orange-dark': '#F15B2A',
           'orange-light': '#FFBDAD',
@@ -69,14 +69,14 @@ module.exports = {
         lexend: ['Lexend', 'sans-serif'],
       },
       boxShadow: {
-        'buddha': '0 2px 4px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
-        'buddha-md': '0 5px 10px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
-        'buddha-lg': '0 10px 20px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'parrot': '0 2px 4px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'parrot-md': '0 5px 10px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
+        'parrot-lg': '0 10px 20px rgba(33, 51, 67, 0.12), 0 0 1px rgba(33, 51, 67, 0.32)',
       },
       borderRadius: {
-        'buddha': '3px',
-        'buddha-md': '5px',
-        'buddha-lg': '8px',
+        'parrot': '3px',
+        'parrot-md': '5px',
+        'parrot-lg': '8px',
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

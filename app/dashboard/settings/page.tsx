@@ -52,37 +52,37 @@ export default function SettingsPage() {
       />
       
       {/* Profile Section */}
-      <div className="card-buddha">
-        <h2 className="text-lg font-medium text-buddha-blue-dark mb-6">Profile Information</h2>
+      <div className="card-parrot">
+        <h2 className="text-lg font-medium text-parrot-blue-dark mb-6">Profile Information</h2>
         
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-24">
-            <div className="h-24 w-24 rounded-full overflow-hidden border-2 border-buddha-gray-200">
+            <div className="h-24 w-24 rounded-full overflow-hidden border-2 border-parrot-gray-200">
               <img src={mockUser.picture} alt={mockUser.name} className="h-full w-full object-cover" />
             </div>
           </div>
           <div className="flex-1 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-buddha-gray-600 mb-1">Name</label>
-                <p className="text-buddha-blue-dark font-medium">{mockUser.name}</p>
+                <label className="block text-sm text-parrot-gray-600 mb-1">Name</label>
+                <p className="text-parrot-blue-dark font-medium">{mockUser.name}</p>
               </div>
               <div>
-                <label className="block text-sm text-buddha-gray-600 mb-1">Email</label>
-                <p className="text-buddha-blue-dark font-medium">{mockUser.email}</p>
+                <label className="block text-sm text-parrot-gray-600 mb-1">Email</label>
+                <p className="text-parrot-blue-dark font-medium">{mockUser.email}</p>
               </div>
               <div>
-                <label className="block text-sm text-buddha-gray-600 mb-1">Member Since</label>
-                <p className="text-buddha-blue-dark font-medium">{formatDate(mockUser.createdAt)}</p>
+                <label className="block text-sm text-parrot-gray-600 mb-1">Member Since</label>
+                <p className="text-parrot-blue-dark font-medium">{formatDate(mockUser.createdAt)}</p>
               </div>
             </div>
             
             <div className="flex gap-2 mt-4">
-              <button className="btn-buddha">
+              <button className="btn-parrot">
                 Edit Profile
               </button>
               <button 
-                className="btn-buddha-secondary"
+                className="btn-parrot-secondary"
                 onClick={handleExternalAuth}
               >
                 Change Password
@@ -93,40 +93,40 @@ export default function SettingsPage() {
       </div>
       
       {/* Subscription Section */}
-      <div className="card-buddha">
-        <h2 className="text-lg font-medium text-buddha-blue-dark mb-6">Subscription</h2>
+      <div className="card-parrot">
+        <h2 className="text-lg font-medium text-parrot-blue-dark mb-6">Subscription</h2>
         
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
-            <div className="bg-buddha-blue-50 border border-buddha-blue-200 rounded-buddha p-5">
+            <div className="bg-parrot-blue-50 border border-parrot-blue-200 rounded-parrot p-5">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-xl font-semibold text-buddha-blue-dark">{mockUser.subscription.plan}</h3>
-                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-buddha-orange-light text-buddha-orange-dark">
+                <h3 className="text-xl font-semibold text-parrot-blue-dark">{mockUser.subscription.plan}</h3>
+                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-parrot-green-light text-parrot-orange-dark">
                   {mockUser.subscription.status}
                 </span>
               </div>
               
               <div className="flex items-baseline mb-4">
-                <span className="text-2xl font-bold text-buddha-blue-dark">${mockUser.subscription.price}</span>
-                <span className="text-buddha-gray-600 ml-1">/month</span>
+                <span className="text-2xl font-bold text-parrot-blue-dark">${mockUser.subscription.price}</span>
+                <span className="text-parrot-gray-600 ml-1">/month</span>
               </div>
               
-              <div className="text-sm text-buddha-gray-700 mb-2">
+              <div className="text-sm text-parrot-gray-700 mb-2">
                 Next billing: {formatDate(mockUser.subscription.nextBillingDate)}
               </div>
               
-              <button className="btn-buddha-secondary w-full mt-4">
+              <button className="btn-parrot-secondary w-full mt-4">
                 Manage Subscription
               </button>
             </div>
           </div>
           
           <div className="flex-1">
-            <h3 className="text-buddha-blue-dark font-medium mb-3">Plan Features</h3>
+            <h3 className="text-parrot-blue-dark font-medium mb-3">Plan Features</h3>
             <ul className="space-y-2">
               {mockUser.subscription.features.map((feature, index) => (
-                <li key={index} className="flex items-center text-buddha-gray-700">
-                  <svg className="h-5 w-5 text-buddha-orange mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <li key={index} className="flex items-center text-parrot-gray-700">
+                  <svg className="h-5 w-5 text-parrot-orange mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {feature}
@@ -135,18 +135,18 @@ export default function SettingsPage() {
             </ul>
             
             <div className="mt-4">
-              <a href="#" className="text-buddha-orange hover:text-buddha-orange-dark text-sm">View all plan options</a>
+              <a href="#" className="text-parrot-orange hover:text-parrot-orange-dark text-sm">View all plan options</a>
             </div>
           </div>
         </div>
       </div>
       
       {/* Account Settings Section */}
-      <div className="card-buddha">
-        <h2 className="text-lg font-medium text-buddha-blue-dark mb-6">Account Settings</h2>
+      <div className="card-parrot">
+        <h2 className="text-lg font-medium text-parrot-blue-dark mb-6">Account Settings</h2>
         
         <div className="space-y-4">
-          <div className="p-4 border border-buddha-gray-200 rounded-buddha">
+          <div className="p-4 border border-parrot-gray-200 rounded-parrot">
             <Toggle
               id="emailNotifications"
               checked={emailNotifications}
@@ -156,22 +156,22 @@ export default function SettingsPage() {
             />
           </div>
           
-          <div className="flex justify-between items-center p-4 border border-buddha-gray-200 rounded-buddha">
+          <div className="flex justify-between items-center p-4 border border-parrot-gray-200 rounded-parrot">
             <div>
-              <h3 className="font-medium text-buddha-blue-dark">Two-Factor Authentication</h3>
-              <p className="text-sm text-buddha-gray-600">Add an extra layer of security to your account</p>
+              <h3 className="font-medium text-parrot-blue-dark">Two-Factor Authentication</h3>
+              <p className="text-sm text-parrot-gray-600">Add an extra layer of security to your account</p>
             </div>
-            <button className="btn-buddha-secondary">
+            <button className="btn-parrot-secondary">
               Enable
             </button>
           </div>
           
-          <div className="flex justify-between items-center p-4 border border-buddha-gray-200 rounded-buddha">
+          <div className="flex justify-between items-center p-4 border border-parrot-gray-200 rounded-parrot">
             <div>
-              <h3 className="font-medium text-buddha-red-dark">Delete Account</h3>
-              <p className="text-sm text-buddha-gray-600">Permanently delete your account and all data</p>
+              <h3 className="font-medium text-parrot-red-dark">Delete Account</h3>
+              <p className="text-sm text-parrot-gray-600">Permanently delete your account and all data</p>
             </div>
-            <button className="btn-buddha-danger">
+            <button className="btn-parrot-danger">
               Delete Account
             </button>
           </div>

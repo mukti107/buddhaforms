@@ -8,8 +8,8 @@ const lexend = Lexend({
 });
 
 export const metadata = {
-  title: 'BuddhaForms - Simple Form Management',
-  description: 'Create, manage, and collect form submissions easily with BuddhaForms',
+  title: 'ParrotForms - Simple Form Management',
+  description: 'Create, manage, and collect form submissions easily with ParrotForms',
 };
 
 export default function RootLayout({

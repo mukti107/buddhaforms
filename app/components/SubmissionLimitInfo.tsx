@@ -18,17 +18,17 @@ const SubmissionLimitInfo: React.FC<SubmissionLimitInfoProps> = ({
   // Calculate percentage
   const percentage = Math.min(Math.round((used / total) * 100), 100);
   
-  // Format chart data for RadialBarChart - only one bar with buddha orange color
+  // Format chart data for RadialBarChart - only one bar with parrot orange color
   const chartData = [
     {
       name: 'Submissions',
       value: percentage,
-      fill: '#ff7a59' // buddha orange
+      fill: '#ff7a59' // parrot orange
     }
   ];
   
   return (
-    <Card className="card-buddha h-full flex flex-col">
+    <Card className="card-parrot h-full flex flex-col">
       <CardHeader className="items-center text-center p-6 pb-0">
         <CardTitle>Submission Limits</CardTitle>
         <CardDescription>Plan usage this month</CardDescription>
@@ -73,21 +73,21 @@ const SubmissionLimitInfo: React.FC<SubmissionLimitInfoProps> = ({
         </div>
       </CardContent>
       <div className="p-3 pt-0 text-center">
-        <div className="text-xl font-bold text-buddha-orange mb-1">
+        <div className="text-xl font-bold text-parrot-orange mb-1">
           {used.toLocaleString()} / {total.toLocaleString()}
         </div>
         <div className="flex justify-center gap-4 mb-2">
-          <p className="text-buddha-gray-600 text-sm">
+          <p className="text-parrot-gray-600 text-sm">
             <span className="font-medium">Plan:</span> {planName}
           </p>
-          <p className="text-buddha-gray-600 text-sm">
+          <p className="text-parrot-gray-600 text-sm">
             <span className="font-medium">Resets:</span> June 30
           </p>
         </div>
         
         {percentage >= 80 && (
-          <div className="bg-buddha-orange-light border-l-2 border-buddha-orange p-2 rounded-buddha mb-2">
-            <p className="text-buddha-gray-800 text-xs">
+          <div className="bg-parrot-green-light border-l-2 border-parrot-orange p-2 rounded-parrot mb-2">
+            <p className="text-parrot-gray-800 text-xs">
               {percentage >= 90 
                 ? "Approaching limit! Upgrade now."
                 : "80% used. Consider upgrading."}
@@ -95,7 +95,7 @@ const SubmissionLimitInfo: React.FC<SubmissionLimitInfoProps> = ({
           </div>
         )}
         
-        <button className="btn-buddha text-xs py-1 px-4 mb-0">
+        <button className="btn-parrot text-xs py-1 px-4 mb-0">
           Upgrade Plan
         </button>
       </div>

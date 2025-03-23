@@ -33,9 +33,9 @@ const FormsAnalytics: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Card className="card-buddha h-full">
+      <Card className="card-parrot h-full">
         <div className="flex items-center justify-center h-[300px]">
-          <div className="animate-pulse text-buddha-gray-600">Loading analytics...</div>
+          <div className="animate-pulse text-parrot-gray-600">Loading analytics...</div>
         </div>
       </Card>
     );
@@ -43,7 +43,7 @@ const FormsAnalytics: React.FC = () => {
 
   if (error) {
     return (
-      <Card className="card-buddha h-full">
+      <Card className="card-parrot h-full">
         <div className="flex items-center justify-center h-[300px]">
           <div className="text-red-600">Failed to load analytics</div>
         </div>
@@ -55,7 +55,7 @@ const FormsAnalytics: React.FC = () => {
   const totals = data?.totals || { forms: 0, submissions: 0 };
 
   return (
-    <Card className="card-buddha h-full">
+    <Card className="card-parrot h-full">
       <div className="flex items-start justify-between px-6 pt-6">
         <CardHeader className="p-0">
           <CardTitle>Form Analytics</CardTitle>
@@ -63,11 +63,11 @@ const FormsAnalytics: React.FC = () => {
         </CardHeader>
         <div className="flex items-center space-x-2 pt-1">
           <div className="flex items-center mr-1">
-            <span className="w-3 h-3 bg-buddha-orange rounded-full inline-block mr-1"></span>
-            <span className="text-buddha-gray-600 text-sm">Submissions</span>
+            <span className="w-3 h-3 bg-parrot-green rounded-full inline-block mr-1"></span>
+            <span className="text-parrot-gray-600 text-sm">Submissions</span>
           </div>
           <select 
-            className="text-buddha-gray-600 bg-buddha-gray-50 border border-buddha-gray-200 rounded-buddha px-2 py-1 text-sm"
+            className="text-parrot-gray-600 bg-parrot-gray-50 border border-parrot-gray-200 rounded-parrot px-2 py-1 text-sm"
             value={timeRange}
             onChange={handleRangeChange}
           >
@@ -82,13 +82,13 @@ const FormsAnalytics: React.FC = () => {
       <CardContent className="pt-4 pb-0">
         {/* Stats above the chart */}
         <div className="flex justify-between mb-4 px-1">
-          <div className="bg-buddha-gray-50 rounded-buddha p-3 flex-1 mr-3">
-            <div className="text-sm text-buddha-gray-600">Total Forms</div>
-            <div className="text-2xl font-semibold text-buddha-blue-dark">{totals.forms}</div>
+          <div className="bg-parrot-gray-50 rounded-parrot p-3 flex-1 mr-3">
+            <div className="text-sm text-parrot-gray-600">Total Forms</div>
+            <div className="text-2xl font-semibold text-parrot-blue-dark">{totals.forms}</div>
           </div>
-          <div className="bg-buddha-gray-50 rounded-buddha p-3 flex-1">
-            <div className="text-sm text-buddha-gray-600">Total Submissions</div>
-            <div className="text-2xl font-semibold text-buddha-blue-dark">{totals.submissions}</div>
+          <div className="bg-parrot-gray-50 rounded-parrot p-3 flex-1">
+            <div className="text-sm text-parrot-gray-600">Total Submissions</div>
+            <div className="text-2xl font-semibold text-parrot-blue-dark">{totals.submissions}</div>
           </div>
         </div>
         

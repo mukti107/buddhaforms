@@ -21,46 +21,46 @@ body {
 
 @layer base {
   h1 {
-    @apply text-2xl font-semibold text-buddha-blue-dark;
+    @apply text-2xl font-semibold text-parrot-blue-dark;
   }
   h2 {
-    @apply text-xl font-medium text-buddha-blue-dark;
+    @apply text-xl font-medium text-parrot-blue-dark;
   }
   h3 {
-    @apply text-lg font-medium text-buddha-blue-dark;
+    @apply text-lg font-medium text-parrot-blue-dark;
   }
 }
 
 @layer components {
-  .btn-buddha {
-    @apply bg-buddha-orange hover:bg-buddha-orange-dark text-white font-medium py-2 px-4 rounded-buddha transition-colors duration-200;
+  .btn-parrot {
+    @apply bg-parrot-green hover:bg-parrot-green-dark text-white font-medium py-2 px-4 rounded-parrot transition-colors duration-200;
   }
   
-  .btn-buddha-secondary {
-    @apply bg-white hover:bg-buddha-gray-100 text-buddha-blue-dark border border-buddha-gray-300 font-medium py-2 px-4 rounded-buddha transition-colors duration-200;
+  .btn-parrot-secondary {
+    @apply bg-white hover:bg-parrot-gray-100 text-parrot-blue-dark border border-parrot-gray-300 font-medium py-2 px-4 rounded-parrot transition-colors duration-200;
   }
   
-  .btn-buddha-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-buddha transition-colors duration-200;
+  .btn-parrot-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-parrot transition-colors duration-200;
   }
   
-  .card-buddha {
-    @apply bg-white rounded-buddha-md shadow-buddha p-6 border border-buddha-gray-200;
+  .card-parrot {
+    @apply bg-white rounded-parrot-md shadow-parrot p-6 border border-parrot-gray-200;
   }
   
-  .input-buddha {
-    @apply border border-buddha-gray-300 rounded-buddha p-2 focus:ring-2 focus:ring-buddha-orange focus:border-transparent outline-none;
+  .input-parrot {
+    @apply border border-parrot-gray-300 rounded-parrot p-2 focus:ring-2 focus:ring-parrot-orange focus:border-transparent outline-none;
   }
   
   .sidebar-link {
-    @apply flex items-center gap-2 p-2 text-buddha-gray-700 hover:text-buddha-orange hover:bg-buddha-gray-50 rounded-buddha transition-colors duration-200;
+    @apply flex items-center gap-2 p-2 text-parrot-gray-700 hover:text-parrot-orange hover:bg-parrot-gray-50 rounded-parrot transition-colors duration-200;
   }
   
   .sidebar-link.active {
-    @apply bg-buddha-gray-100 text-buddha-orange font-medium;
+    @apply bg-parrot-gray-100 text-parrot-orange font-medium;
   }
   
   .btn-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-buddha transition-colors duration-200;
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-parrot transition-colors duration-200;
   }
 }

@@ -76,20 +76,20 @@ export default function SubmissionDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="card-buddha text-center p-8">
-        <p className="text-buddha-gray-600">Loading submission details...</p>
+      <div className="card-parrot text-center p-8">
+        <p className="text-parrot-gray-600">Loading submission details...</p>
       </div>
     );
   }
 
   if (error || !submission) {
     return (
-      <div className="card-buddha text-center p-8">
-        <h1 className="text-xl font-semibold text-buddha-blue-dark mb-4">Submission Not Found</h1>
-        <p className="mb-6 text-buddha-gray-600 text-sm">
+      <div className="card-parrot text-center p-8">
+        <h1 className="text-xl font-semibold text-parrot-blue-dark mb-4">Submission Not Found</h1>
+        <p className="mb-6 text-parrot-gray-600 text-sm">
           The submission you're looking for doesn't exist or has been deleted.
         </p>
-        <Link href="/dashboard/submissions" className="btn-buddha text-sm">
+        <Link href="/dashboard/submissions" className="btn-parrot text-sm">
           Return to Submissions
         </Link>
       </div>
@@ -118,15 +118,15 @@ export default function SubmissionDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Submission Data */}
-        <div className="lg:col-span-2 card-buddha">
-          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Form Data</h2>
+        <div className="lg:col-span-2 card-parrot">
+          <h2 className="text-lg font-medium text-parrot-blue-dark mb-4">Form Data</h2>
           <div className="space-y-4">
             {Object.entries(submission.data).map(([key, value]) => (
-              <div key={key} className="border-b border-buddha-gray-200 pb-4 last:border-0">
-                <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+              <div key={key} className="border-b border-parrot-gray-200 pb-4 last:border-0">
+                <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                   {key}
                 </label>
-                <div className="text-buddha-gray-900 break-words">
+                <div className="text-parrot-gray-900 break-words">
                   {typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
                 </div>
               </div>
@@ -135,19 +135,19 @@ export default function SubmissionDetailPage() {
         </div>
 
         {/* Submission Details */}
-        <div className="card-buddha">
-          <h2 className="text-lg font-medium text-buddha-blue-dark mb-4">Submission Details</h2>
+        <div className="card-parrot">
+          <h2 className="text-lg font-medium text-parrot-blue-dark mb-4">Submission Details</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+              <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                 Submission Date
               </label>
-              <div className="text-buddha-gray-900">
+              <div className="text-parrot-gray-900">
                 {formatDate(submission.submittedAt)}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+              <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                 Status
               </label>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -160,26 +160,26 @@ export default function SubmissionDetailPage() {
             </div>
             {submission.ip && (
               <div>
-                <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+                <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                   IP Address
                 </label>
-                <div className="text-buddha-gray-900">{submission.ip}</div>
+                <div className="text-parrot-gray-900">{submission.ip}</div>
               </div>
             )}
             {submission.referrer && (
               <div>
-                <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+                <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                   Referrer
                 </label>
-                <div className="text-buddha-gray-900 break-words">{submission.referrer}</div>
+                <div className="text-parrot-gray-900 break-words">{submission.referrer}</div>
               </div>
             )}
             {submission.userAgent && (
               <div>
-                <label className="block text-sm font-medium text-buddha-gray-700 mb-1">
+                <label className="block text-sm font-medium text-parrot-gray-700 mb-1">
                   User Agent
                 </label>
-                <div className="text-buddha-gray-900 break-words">{submission.userAgent}</div>
+                <div className="text-parrot-gray-900 break-words">{submission.userAgent}</div>
               </div>
             )}
           </div>

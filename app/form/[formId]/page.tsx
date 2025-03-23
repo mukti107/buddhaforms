@@ -121,7 +121,7 @@ export default function PublicFormPage({ params }: { params: Promise<{ formId: s
       </form>
       
       <div className="mt-4 text-center text-sm text-gray-500">
-        Powered by <span className="font-medium">BuddhaForms</span>
+        Powered by <span className="font-medium">ParrotForms</span>
       </div>
     </div>
   );

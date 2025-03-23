@@ -86,10 +86,10 @@ export default function DashboardLayout({
   }, []);
 
   const isActive = (path: string) => {
-    if (path === "/dashboard" && pathname === "/dashboard") {
+    if (path === "/" && pathname === "/") {
       return true;
     }
-    if (path !== "/dashboard" && pathname.startsWith(path)) {
+    if (path !== "/" && pathname.startsWith(path)) {
       return true;
     }
     return false;
@@ -134,8 +134,8 @@ export default function DashboardLayout({
       mutate('/api/forms');
       
       // Navigate to forms page if not already there
-      if (pathname !== "/dashboard/forms") {
-        router.push('/dashboard/forms');
+      if (pathname !== "//forms") {
+        router.push('//forms');
       }
       
       // Show success message
@@ -174,7 +174,7 @@ export default function DashboardLayout({
         >
           {/* Logo and branding */}
           <div className="flex h-16 items-center justify-center border-b border-parrot-gray-200">
-            <Link href="/dashboard" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-parrot-green flex items-center justify-center">
                 <span className="text-white font-bold">PF</span>
               </div>
@@ -204,8 +204,8 @@ export default function DashboardLayout({
           {/* Navigation */}
           <nav className="p-4 space-y-1">
             <Link
-              href="/dashboard"
-              className={`sidebar-link text-sm ${isActive("/dashboard") ? "active" : ""}`}
+              href="/"
+              className={`sidebar-link text-sm ${isActive("/") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -220,8 +220,8 @@ export default function DashboardLayout({
 
             {/* Always show Forms and Submissions links, they will be empty if no forms exist */}
             <Link
-              href="/dashboard/forms"
-              className={`sidebar-link text-sm ${isActive("/dashboard/forms") ? "active" : ""}`}
+              href="/forms"
+              className={`sidebar-link text-sm ${isActive("//forms") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -235,8 +235,8 @@ export default function DashboardLayout({
             </Link>
 
             <Link
-              href="/dashboard/submissions"
-              className={`sidebar-link text-sm ${isActive("/dashboard/submissions") ? "active" : ""}`}
+              href="/submissions"
+              className={`sidebar-link text-sm ${isActive("//submissions") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -250,8 +250,8 @@ export default function DashboardLayout({
             </Link>
 
             {/* <Link
-              href="/dashboard/settings"
-              className={`sidebar-link text-sm ${isActive("/dashboard/settings") ? "active" : ""}`}
+              href="/settings"
+              className={`sidebar-link text-sm ${isActive("//settings") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -329,7 +329,7 @@ export default function DashboardLayout({
             </button>
           ) : (
             /* Show logo when sidebar is hidden */
-            <Link href="/dashboard" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-parrot-green flex items-center justify-center">
                 <span className="text-white font-bold">BF</span>
               </div>

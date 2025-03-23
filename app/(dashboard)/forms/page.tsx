@@ -35,7 +35,7 @@ export default function FormsPage() {
   // Add redirect effect when no forms exist
   useEffect(() => {
     if (data && !isLoading && forms.length === 0) {
-      router.push('/dashboard');
+      router.push('/');
     }
   }, [data, isLoading, forms.length, router]);
 
@@ -214,7 +214,7 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link 
-                        href={`/dashboard/submissions?formId=${form.formId}`}
+                        href={`//submissions?formId=${form.formId}`}
                         className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium"
                       >
                         {form.submissionCount || 0} Submissions
@@ -222,13 +222,13 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                       <Link 
-                        href={`/dashboard/forms/${form.formId}`}
+                        href={`//forms/${form.formId}`}
                         className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         View
                       </Link>
                       <Link 
-                        href={`/dashboard/forms/${form.formId}/edit`}
+                        href={`//forms/${form.formId}/edit`}
                         className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         Edit

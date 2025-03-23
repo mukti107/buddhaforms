@@ -129,7 +129,7 @@ export default function GeneratorPage() {
               Home
             </Link>
             <Link
-              href="/dashboard"
+              href="/"
               className="btn-parrot flex items-center gap-1 text-sm"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,7 +231,7 @@ export default function GeneratorPage() {
         <p className="text-parrot-gray-600 max-w-2xl mx-auto mb-8">
           Choose a template above to get started or sign up for a free account to save your forms and collect submissions.
         </p>
-        <Link href="/dashboard" className="btn-parrot text-base px-8 py-3">
+        <Link href="/" className="btn-parrot text-base px-8 py-3">
           Create a Free Account
         </Link>
       </div>

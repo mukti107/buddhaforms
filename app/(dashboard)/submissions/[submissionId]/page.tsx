@@ -67,7 +67,7 @@ export default function SubmissionDetailPage() {
       mutate('/api/submissions');
       
       // Navigate back to submissions list
-      router.push('/dashboard/submissions');
+      router.push('//submissions');
     } catch (err) {
       console.error(err);
       alert('Failed to delete submission. Please try again.');
@@ -89,7 +89,7 @@ export default function SubmissionDetailPage() {
         <p className="mb-6 text-parrot-gray-600 text-sm">
           The submission you're looking for doesn't exist or has been deleted.
         </p>
-        <Link href="/dashboard/submissions" className="btn-parrot text-sm">
+        <Link href="/submissions" className="btn-parrot text-sm">
           Return to Submissions
         </Link>
       </div>
@@ -110,7 +110,7 @@ export default function SubmissionDetailPage() {
           },
           {
             label: "Back to Submissions",
-            href: "/dashboard/submissions",
+            href: "//submissions",
             isPrimary: false
           }
         ]}

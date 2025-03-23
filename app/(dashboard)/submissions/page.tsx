@@ -147,7 +147,7 @@ function SubmissionsList() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
-                        href={`/dashboard/submissions/${submission.id}`}
+                        href={`//submissions/${submission.id}`}
                         className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         View Details
@@ -164,13 +164,13 @@ function SubmissionsList() {
             <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-parrot-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
                 <Link
-                  href={`/dashboard/submissions?page=${Math.max(1, pagination.page - 1)}`}
+                  href={`//submissions?page=${Math.max(1, pagination.page - 1)}`}
                   className={`btn-parrot-secondary text-sm ${pagination.page <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   Previous
                 </Link>
                 <Link
-                  href={`/dashboard/submissions?page=${Math.min(pagination.pages, pagination.page + 1)}`}
+                  href={`//submissions?page=${Math.min(pagination.pages, pagination.page + 1)}`}
                   className={`btn-parrot-secondary text-sm ${pagination.page >= pagination.pages ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   Next

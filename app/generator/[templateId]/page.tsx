@@ -419,7 +419,7 @@ export default function TemplateDetailPage() {
               Form Generator
             </Link>
             <Link
-              href="/dashboard"
+              href="/"
               className="btn-parrot flex items-center gap-1 text-sm"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -565,7 +565,7 @@ export default function TemplateDetailPage() {
           <p className="text-parrot-gray-700 mb-4">
             Create a free ParrotForms account to access more templates, save your forms, and collect submissions.
           </p>
-          <Link href="/dashboard" className="btn-parrot">
+          <Link href="/" className="btn-parrot">
             Create a Free Account
           </Link>
         </div>

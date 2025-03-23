@@ -114,7 +114,7 @@ export default function Dashboard() {
         <div className="card-parrot">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Recent Submissions</h2>
-            <Link href="/dashboard/submissions" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
+            <Link href="/submissions" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -131,7 +131,7 @@ export default function Dashboard() {
               {recentSubmissions.map((submission: Submission) => (
                 <Link 
                   key={submission.id}
-                  href={`/dashboard/submissions/${submission.id}`}
+                  href={`//submissions/${submission.id}`}
                   className="flex items-center justify-between p-3 rounded-parrot border border-parrot-gray-200 hover:border-parrot-gray-300 bg-white"
                 >
                   <div>
@@ -151,7 +151,7 @@ export default function Dashboard() {
         <div className="card-parrot">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Your Forms</h2>
-            <Link href="/dashboard/forms" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
+            <Link href="/forms" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
             {forms.map((form: Form) => (
               <Link 
                 key={form.formId} 
-                href={`/dashboard/forms/${form.formId}`}
+                href={`//forms/${form.formId}`}
                 className="flex items-center justify-between p-3 rounded-parrot border border-parrot-gray-200 hover:border-parrot-orange transition-colors duration-200"
               >
                 <div className="flex items-center">

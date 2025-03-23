@@ -68,7 +68,7 @@ export default function EditFormPage() {
       <div className="card-parrot text-center p-8">
         <h1 className="text-xl font-semibold text-parrot-blue-dark mb-4">Form Not Found</h1>
         <p className="mb-6 text-parrot-gray-600 text-sm">The form you're looking for doesn't exist or has been deleted.</p>
-        <Link href="/dashboard/forms" className="btn-parrot text-sm">
+        <Link href="/forms" className="btn-parrot text-sm">
           Return to Forms
         </Link>
       </div>
@@ -141,7 +141,7 @@ export default function EditFormPage() {
 
       // Revalidate forms list and redirect
       mutate('/api/forms');
-      router.push('/dashboard/forms');
+      router.push('//forms');
     } catch (err) {
       console.error(err);
       alert('Failed to delete form. Please try again.');
@@ -164,7 +164,7 @@ export default function EditFormPage() {
         actions={[
           {
             label: "Cancel",
-            href: `/dashboard/forms/${formId}`,
+            href: `//forms/${formId}`,
             isPrimary: false
           },
           {

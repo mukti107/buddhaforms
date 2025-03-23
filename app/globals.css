@@ -53,11 +53,11 @@ body {
   }
   
   .sidebar-link {
-    @apply flex items-center gap-2 p-2 text-parrot-gray-700 hover:text-parrot-orange hover:bg-parrot-gray-50 rounded-parrot transition-colors duration-200;
+    @apply flex items-center gap-2 p-2 text-parrot-gray-700 hover:text-parrot-green hover:bg-parrot-gray-50 rounded-parrot transition-colors duration-200;
   }
   
   .sidebar-link.active {
-    @apply bg-parrot-gray-100 text-parrot-orange font-medium;
+    @apply bg-parrot-gray-100 text-parrot-green font-medium;
   }
   
   .btn-danger {

@@ -215,7 +215,7 @@ export default function FormsPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link 
                         href={`/dashboard/submissions?formId=${form.formId}`}
-                        className="text-parrot-orange hover:text-parrot-orange-dark text-sm font-medium"
+                        className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium"
                       >
                         {form.submissionCount || 0} Submissions
                       </Link>
@@ -223,19 +223,19 @@ export default function FormsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                       <Link 
                         href={`/dashboard/forms/${form.formId}`}
-                        className="text-parrot-orange hover:text-parrot-orange-dark"
+                        className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         View
                       </Link>
                       <Link 
                         href={`/dashboard/forms/${form.formId}/edit`}
-                        className="text-parrot-orange hover:text-parrot-orange-dark"
+                        className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         Edit
                       </Link>
                       <button
                         type="button"
-                        className="text-parrot-orange hover:text-parrot-orange-dark"
+                        className="text-parrot-green hover:text-parrot-green-dark"
                         onClick={() => handleDelete(form.formId)}
                       >
                         Delete
@@ -266,13 +266,13 @@ export default function FormsPage() {
           <div className="flex-1 space-y-4">
             <h3 className="font-medium text-parrot-blue-dark">Need help?</h3>
             <div className="space-y-2">
-              <a href="https://docs.parrotforms.com" target="_blank" rel="noopener noreferrer" className="text-parrot-orange hover:text-parrot-orange-dark flex items-center gap-1">
+              <a href="https://docs.parrotforms.com" target="_blank" rel="noopener noreferrer" className="text-parrot-green hover:text-parrot-green-dark flex items-center gap-1">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span>Documentation</span>
               </a>
-              <a href="mailto:support@parrotforms.com" className="text-parrot-orange hover:text-parrot-orange-dark flex items-center gap-1">
+              <a href="mailto:support@parrotforms.com" className="text-parrot-green hover:text-parrot-green-dark flex items-center gap-1">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>

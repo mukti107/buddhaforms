@@ -62,7 +62,7 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-pulse">
-          <svg className="h-10 w-10 text-parrot-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-10 w-10 text-parrot-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
         </div>
@@ -114,7 +114,7 @@ export default function Dashboard() {
         <div className="card-parrot">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Recent Submissions</h2>
-            <Link href="/dashboard/submissions" className="text-parrot-orange hover:text-parrot-orange-dark text-sm font-medium">
+            <Link href="/dashboard/submissions" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -151,7 +151,7 @@ export default function Dashboard() {
         <div className="card-parrot">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Your Forms</h2>
-            <Link href="/dashboard/forms" className="text-parrot-orange hover:text-parrot-orange-dark text-sm font-medium">
+            <Link href="/dashboard/forms" className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -164,7 +164,7 @@ export default function Dashboard() {
                 className="flex items-center justify-between p-3 rounded-parrot border border-parrot-gray-200 hover:border-parrot-orange transition-colors duration-200"
               >
                 <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-parrot bg-parrot-gray-100 text-parrot-orange flex items-center justify-center mr-3">
+                  <div className="h-10 w-10 rounded-parrot bg-parrot-gray-100 text-parrot-green flex items-center justify-center mr-3">
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -206,13 +206,13 @@ export default function Dashboard() {
           <div className="flex-1 space-y-4">
             <h3 className="font-medium text-parrot-blue-dark">Need help?</h3>
             <div className="space-y-2">
-              <a href="https://docs.parrotforms.com" target="_blank" rel="noopener noreferrer" className="text-parrot-orange hover:text-parrot-orange-dark flex items-center gap-1">
+              <a href="https://docs.parrotforms.com" target="_blank" rel="noopener noreferrer" className="text-parrot-green hover:text-parrot-green-dark flex items-center gap-1">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span>Documentation</span>
               </a>
-              <a href="mailto:support@parrotforms.com" className="text-parrot-orange hover:text-parrot-orange-dark flex items-center gap-1">
+              <a href="mailto:support@parrotforms.com" className="text-parrot-green hover:text-parrot-green-dark flex items-center gap-1">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>

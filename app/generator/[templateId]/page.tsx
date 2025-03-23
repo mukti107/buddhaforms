@@ -492,7 +492,7 @@ export default function TemplateDetailPage() {
                           <div key={optIdx} className="flex items-center">
                             <input 
                               type="radio" 
-                              className="h-4 w-4 text-parrot-orange"
+                              className="h-4 w-4 text-parrot-green"
                               disabled
                             />
                             <label className="ml-2 text-sm text-parrot-gray-700">{option}</label>
@@ -505,7 +505,7 @@ export default function TemplateDetailPage() {
                           <div key={optIdx} className="flex items-center">
                             <input 
                               type="checkbox" 
-                              className="h-4 w-4 text-parrot-orange"
+                              className="h-4 w-4 text-parrot-green"
                               disabled
                             />
                             <label className="ml-2 text-sm text-parrot-gray-700">{option}</label>

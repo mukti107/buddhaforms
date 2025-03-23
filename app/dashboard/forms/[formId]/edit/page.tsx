@@ -350,7 +350,7 @@ export default function EditFormPage() {
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="text-parrot-orange focus:ring-parrot-orange h-4 w-4 border-parrot-gray-300 rounded"
+                    className="text-parrot-green focus:ring-parrot-orange h-4 w-4 border-parrot-gray-300 rounded"
                     checked={deleteChecked}
                     onChange={(e) => setDeleteChecked(e.target.checked)}
                   />

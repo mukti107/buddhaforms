@@ -171,7 +171,7 @@ export default function GeneratorPage() {
                   <h3 className="text-lg font-medium text-parrot-blue-dark">{template.title}</h3>
                 </div>
                 <p className="text-parrot-gray-600 text-sm">{template.description}</p>
-                <div className="mt-4 text-parrot-orange hover:text-parrot-orange-dark font-medium text-sm flex items-center">
+                <div className="mt-4 text-parrot-green hover:text-parrot-green-dark font-medium text-sm flex items-center">
                   Use this template
                   <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

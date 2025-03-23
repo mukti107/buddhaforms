@@ -73,7 +73,7 @@ const SubmissionLimitInfo: React.FC<SubmissionLimitInfoProps> = ({
         </div>
       </CardContent>
       <div className="p-3 pt-0 text-center">
-        <div className="text-xl font-bold text-parrot-orange mb-1">
+        <div className="text-xl font-bold text-parrot-green mb-1">
           {used.toLocaleString()} / {total.toLocaleString()}
         </div>
         <div className="flex justify-center gap-4 mb-2">

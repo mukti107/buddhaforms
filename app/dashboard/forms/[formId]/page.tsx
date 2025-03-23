@@ -172,7 +172,7 @@ export default function FormDetailPage() {
                     onClick={() => {
                       navigator.clipboard.writeText(endpointUrl);
                     }}
-                    className="text-parrot-orange hover:text-parrot-orange-dark text-sm"
+                    className="text-parrot-green hover:text-parrot-green-dark text-sm"
                   >
                     Copy
                   </button>
@@ -217,7 +217,7 @@ export default function FormDetailPage() {
         <div className="card-parrot lg:col-span-3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Recent Submissions</h2>
-            <Link href={`/dashboard/forms/${formId}/submissions`} className="text-parrot-orange hover:text-parrot-orange-dark text-sm font-medium">
+            <Link href={`/dashboard/forms/${formId}/submissions`} className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -264,7 +264,7 @@ export default function FormDetailPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                         <Link 
                           href={`/dashboard/submissions/${submission.id}`}
-                          className="text-parrot-orange hover:text-parrot-orange-dark font-medium"
+                          className="text-parrot-green hover:text-parrot-green-dark font-medium"
                         >
                           View Details
                         </Link>

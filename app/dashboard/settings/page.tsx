@@ -101,7 +101,7 @@ export default function SettingsPage() {
             <div className="bg-parrot-blue-50 border border-parrot-blue-200 rounded-parrot p-5">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-xl font-semibold text-parrot-blue-dark">{mockUser.subscription.plan}</h3>
-                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-parrot-green-light text-parrot-orange-dark">
+                <span className="px-2.5 py-1 text-sm font-medium rounded-full bg-parrot-green-light text-parrot-green-dark">
                   {mockUser.subscription.status}
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function SettingsPage() {
             <ul className="space-y-2">
               {mockUser.subscription.features.map((feature, index) => (
                 <li key={index} className="flex items-center text-parrot-gray-700">
-                  <svg className="h-5 w-5 text-parrot-orange mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-parrot-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {feature}
@@ -135,7 +135,7 @@ export default function SettingsPage() {
             </ul>
             
             <div className="mt-4">
-              <a href="#" className="text-parrot-orange hover:text-parrot-orange-dark text-sm">View all plan options</a>
+              <a href="#" className="text-parrot-green hover:text-parrot-green-dark text-sm">View all plan options</a>
             </div>
           </div>
         </div>

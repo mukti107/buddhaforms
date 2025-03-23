@@ -134,8 +134,8 @@ export default function DashboardLayout({
       mutate('/api/forms');
       
       // Navigate to forms page if not already there
-      if (pathname !== "//forms") {
-        router.push('//forms');
+      if (pathname !== "/forms") {
+        router.push('/forms');
       }
       
       // Show success message
@@ -221,7 +221,7 @@ export default function DashboardLayout({
             {/* Always show Forms and Submissions links, they will be empty if no forms exist */}
             <Link
               href="/forms"
-              className={`sidebar-link text-sm ${isActive("//forms") ? "active" : ""}`}
+              className={`sidebar-link text-sm ${isActive("/forms") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -236,7 +236,7 @@ export default function DashboardLayout({
 
             <Link
               href="/submissions"
-              className={`sidebar-link text-sm ${isActive("//submissions") ? "active" : ""}`}
+              className={`sidebar-link text-sm ${isActive("/submissions") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -251,7 +251,7 @@ export default function DashboardLayout({
 
             {/* <Link
               href="/settings"
-              className={`sidebar-link text-sm ${isActive("//settings") ? "active" : ""}`}
+              className={`sidebar-link text-sm ${isActive("/settings") ? "active" : ""}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path

@@ -104,12 +104,12 @@ export default function FormDetailPage() {
         actions={[
           {
             label: "Edit Form",
-            href: `//forms/${formId}/edit`,
+            href: `/forms/${formId}/edit`,
             isPrimary: true
           },
           {
             label: "View All Submissions",
-            href: `//submissions?formId=${formId}`,
+            href: `/submissions?formId=${formId}`,
             isPrimary: true
           }
         ]}
@@ -217,7 +217,7 @@ export default function FormDetailPage() {
         <div className="card-parrot lg:col-span-3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-medium text-parrot-blue-dark">Recent Submissions</h2>
-            <Link href={`//forms/${formId}/submissions`} className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
+            <Link href={`/forms/${formId}/submissions`} className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium">
               View All
             </Link>
           </div>
@@ -263,7 +263,7 @@ export default function FormDetailPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                         <Link 
-                          href={`//submissions/${submission.id}`}
+                          href={`/submissions/${submission.id}`}
                           className="text-parrot-green hover:text-parrot-green-dark font-medium"
                         >
                           View Details

@@ -141,7 +141,7 @@ export default function EditFormPage() {
 
       // Revalidate forms list and redirect
       mutate('/api/forms');
-      router.push('//forms');
+      router.push('/forms');
     } catch (err) {
       console.error(err);
       alert('Failed to delete form. Please try again.');
@@ -164,7 +164,7 @@ export default function EditFormPage() {
         actions={[
           {
             label: "Cancel",
-            href: `//forms/${formId}`,
+            href: `/forms/${formId}`,
             isPrimary: false
           },
           {

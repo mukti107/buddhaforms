@@ -214,7 +214,7 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link 
-                        href={`//submissions?formId=${form.formId}`}
+                        href={`/submissions?formId=${form.formId}`}
                         className="text-parrot-green hover:text-parrot-green-dark text-sm font-medium"
                       >
                         {form.submissionCount || 0} Submissions
@@ -222,13 +222,13 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                       <Link 
-                        href={`//forms/${form.formId}`}
+                        href={`/forms/${form.formId}`}
                         className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         View
                       </Link>
                       <Link 
-                        href={`//forms/${form.formId}/edit`}
+                        href={`/forms/${form.formId}/edit`}
                         className="text-parrot-green hover:text-parrot-green-dark"
                       >
                         Edit

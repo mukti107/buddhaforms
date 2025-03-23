@@ -131,7 +131,7 @@ export default function Dashboard() {
               {recentSubmissions.map((submission: Submission) => (
                 <Link 
                   key={submission.id}
-                  href={`//submissions/${submission.id}`}
+                  href={`/submissions/${submission.id}`}
                   className="flex items-center justify-between p-3 rounded-parrot border border-parrot-gray-200 hover:border-parrot-gray-300 bg-white"
                 >
                   <div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
             {forms.map((form: Form) => (
               <Link 
                 key={form.formId} 
-                href={`//forms/${form.formId}`}
+                href={`/forms/${form.formId}`}
                 className="flex items-center justify-between p-3 rounded-parrot border border-parrot-gray-200 hover:border-parrot-orange transition-colors duration-200"
               >
                 <div className="flex items-center">

@@ -67,7 +67,7 @@ export default function SubmissionDetailPage() {
       mutate('/api/submissions');
       
       // Navigate back to submissions list
-      router.push('//submissions');
+      router.push('/submissions');
     } catch (err) {
       console.error(err);
       alert('Failed to delete submission. Please try again.');
@@ -110,7 +110,7 @@ export default function SubmissionDetailPage() {
           },
           {
             label: "Back to Submissions",
-            href: "//submissions",
+            href: "/submissions",
             isPrimary: false
           }
         ]}

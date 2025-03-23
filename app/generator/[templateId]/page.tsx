@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { use } from 'react';
 
 // Import form templates from parent page
@@ -216,15 +216,16 @@ const formTemplates = [
   },
 ];
 
-export default function TemplateDetailPage({ params }: { params: { templateId: string } }) {
+export default function TemplateDetailPage() {
   const router = useRouter();
+  const params = useParams();
   const [template, setTemplate] = useState<any>(null);
   const [htmlCode, setHtmlCode] = useState<string>('');
   const [copied, setCopied] = useState(false);
   
   // Unwrap params with React.use
-  const unwrappedParams = use(params as unknown as Promise<{ templateId: string }>);
-  const templateId = unwrappedParams.templateId;
+  
+  const templateId = params.templateId;
   
   useEffect(() => {
     // Find the template from the template ID
